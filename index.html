@@ -97,12 +97,12 @@
 
 <body class="flex h-screen overflow-hidden selection:bg-theme-accent selection:text-white" data-theme="dark">
 
-    <!-- Notifikasi -->
     <div id="toast-container"></div>
 
     <aside class="w-64 bg-theme-card border-r border-theme-border flex-col hidden md:flex z-20 shrink-0 transition-colors">
         <div class="p-6 border-b border-theme-border flex flex-col items-center">
             <div class="w-20 h-20 mb-3 rounded-full bg-theme-bg border-2 border-theme-accent flex items-center justify-center shadow-[0_0_15px_var(--accent-light)] transition-colors">
+                <!-- Logo Quill-Duck Modern SVG -->
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-12 h-12 text-theme-accent fill-current">
                     <path d="M216,112.51V40a8,8,0,0,0-8-8H160a8,8,0,0,0-7.8,6.24L133.4,121.6A48.07,48.07,0,0,0,104,112H80a48.05,48.05,0,0,0-48,48v48a8,8,0,0,0,8,8H104a48.05,48.05,0,0,0,48-48V163l60.2,13.38A8,8,0,0,0,224,168.6V120A8,8,0,0,0,216,112.51ZM104,200H48V160a32,32,0,0,1,32-32h24a32,32,0,0,1,32,32v8A32,32,0,0,1,104,200Z"/>
                     <circle cx="84" cy="156" r="12"/>
@@ -139,17 +139,14 @@
                 <button class="md:hidden text-theme-accent text-2xl"><i class="ph ph-list"></i></button>
                 <h2 id="header-title" class="text-2xl font-semibold text-theme-text">Ringkasan Finansial</h2>
             </div>
-            <div class="flex space-x-3">
-                <button onclick="window.openExpenseModal()" class="bg-theme-accent hover:bg-theme-hover text-white md:text-theme-bg px-4 py-2.5 rounded-xl text-sm font-bold flex items-center space-x-2 transition-all shadow-[0_0_15px_var(--accent-light)]">
-                    <i class="ph ph-arrow-up-right text-xl"></i>
-                    <span class="hidden md:inline">Catat Pengeluaran</span>
-                </button>
+            <!-- Tombol input pengeluaran dipindah ke Tab Mutasi Kas, menyisakan area kosong atau menu tambahan di masa depan -->
+            <div class="flex items-center space-x-2 text-theme-muted text-sm font-medium">
+                <i class="ph ph-buildings text-xl"></i> <span>Pawon Nusantara</span>
             </div>
         </header>
 
         <main class="flex-1 overflow-y-auto p-4 md:p-6 relative">
             
-            <!-- TAB: DASHBOARD -->
             <div id="tab-dashboard" class="tab-content active max-w-7xl mx-auto space-y-6">
                 
                 <!-- Status Loading Global -->
@@ -159,35 +156,47 @@
                 </div>
 
                 <div id="dashboard-content" class="hidden space-y-6">
+                    
+                    <!-- Filter Tanggal Dashboard -->
+                    <div class="glass-card p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center text-theme-text font-medium"><i class="ph ph-calendar text-theme-accent text-xl mr-2"></i> Filter Laporan (Range Tanggal)</div>
+                        <div class="flex items-center space-x-3">
+                            <input type="date" id="dash-start" class="bg-theme-bg border border-theme-border rounded-lg px-3 py-2 text-theme-text text-sm outline-none focus:border-theme-accent">
+                            <span class="text-theme-muted text-sm">s/d</span>
+                            <input type="date" id="dash-end" class="bg-theme-bg border border-theme-border rounded-lg px-3 py-2 text-theme-text text-sm outline-none focus:border-theme-accent">
+                            <button onclick="window.applyDashboardFilter()" class="bg-theme-accent hover:bg-theme-hover text-white md:text-theme-bg px-4 py-2 rounded-lg text-sm font-bold transition-all shadow-[0_0_10px_var(--accent-light)]">Terapkan</button>
+                        </div>
+                    </div>
+
                     <!-- KPI Cards -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div class="glass-card p-6 flex justify-between items-start">
                             <div>
-                                <p class="text-sm font-medium text-theme-muted mb-1">Total Pemasukan</p>
+                                <p class="text-sm font-medium text-theme-muted mb-1">Pemasukan (Periode Ini)</p>
                                 <h3 id="txt-revenue" class="text-3xl font-bold text-theme-text">Rp 0</h3>
                             </div>
                             <div class="p-3 bg-green-500/10 text-green-500 rounded-xl border border-green-500/20"><i class="ph ph-trend-up text-2xl"></i></div>
                         </div>
                         <div class="glass-card p-6 flex justify-between items-start">
                             <div>
-                                <p class="text-sm font-medium text-theme-muted mb-1">Total Pengeluaran</p>
+                                <p class="text-sm font-medium text-theme-muted mb-1">Pengeluaran (Periode Ini)</p>
                                 <h3 id="txt-expense" class="text-3xl font-bold text-theme-text">Rp 0</h3>
                             </div>
                             <div class="p-3 bg-red-500/10 text-red-500 rounded-xl border border-red-500/20"><i class="ph ph-trend-down text-2xl"></i></div>
                         </div>
                         <div class="glass-card p-6 flex justify-between items-start border-theme-accent/50">
                             <div>
-                                <p class="text-sm font-medium text-theme-accent mb-1">Saldo Kas (Laba)</p>
+                                <p class="text-sm font-medium text-theme-accent mb-1">Laba/Rugi (Periode Ini)</p>
                                 <h3 id="txt-profit" class="text-3xl font-bold text-theme-accent">Rp 0</h3>
                             </div>
-                            <div class="p-3 bg-theme-accent text-white md:text-theme-bg rounded-xl"><i class="ph ph-vault text-2xl"></i></div>
+                            <div class="p-3 bg-theme-accent text-white md:text-theme-bg rounded-xl"><i class="ph ph-scales text-2xl"></i></div>
                         </div>
                     </div>
 
                     <!-- Charts Area -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         <div class="lg:col-span-2 glass-card p-6">
-                            <h3 class="text-lg font-semibold text-theme-text mb-4">Tren Keuangan 7 Hari Terakhir</h3>
+                            <h3 class="text-lg font-semibold text-theme-text mb-4">Tren Keuangan Berdasarkan Periode</h3>
                             <div class="h-64 w-full"><canvas id="financeChart"></canvas></div>
                         </div>
                         <div class="glass-card p-6 flex flex-col">
@@ -196,7 +205,7 @@
                                 <canvas id="expenseChart"></canvas>
                                 <div id="empty-chart-msg" class="absolute flex flex-col items-center text-theme-muted hidden">
                                     <i class="ph ph-pie-chart text-4xl mb-2 opacity-30"></i>
-                                    <p class="text-sm">Belum ada pengeluaran</p>
+                                    <p class="text-sm">Tidak ada data</p>
                                 </div>
                             </div>
                         </div>
@@ -204,19 +213,26 @@
                 </div>
             </div>
 
-            <!-- TAB: MUTASI KAS -->
             <div id="tab-mutasi" class="tab-content max-w-7xl mx-auto space-y-6">
                 
+                <!-- TOTAL KAS CARD -->
+                <div class="glass-card p-6 flex items-center justify-between bg-gradient-to-r from-theme-card to-theme-bg border-l-4 border-l-theme-accent relative overflow-hidden">
+                    <div class="z-10">
+                        <p class="text-sm font-semibold text-theme-muted mb-1 tracking-wider uppercase">Total Saldo Kas Berjalan</p>
+                        <h2 id="total-kas-display" class="text-4xl md:text-5xl font-bold text-theme-accent font-serif tracking-tight">Rp 0</h2>
+                    </div>
+                    <i class="ph ph-vault text-8xl text-theme-accent opacity-10 absolute -right-4 -bottom-4 z-0"></i>
+                </div>
+
                 <!-- Section: Pending Setoran Kasir -->
                 <div class="glass-card overflow-hidden">
                     <div class="p-5 border-b border-theme-border bg-theme-bg/50 flex justify-between items-center">
                         <div class="flex items-center space-x-2">
-                            <i class="ph ph-bell-ringing text-xl text-yellow-500"></i>
+                            <i class="ph ph-bell-ringing text-xl text-yellow-500 animate-pulse"></i>
                             <h3 class="text-lg font-semibold text-theme-text">Menunggu Konfirmasi Setoran</h3>
                         </div>
-                        <!-- Tombol Simulasi (Hanya untuk keperluan demo/testing) -->
                         <button onclick="window.simulateCashierDeposit()" class="text-xs bg-theme-border text-theme-text px-3 py-1.5 rounded-lg hover:bg-theme-muted transition-colors">
-                            <i class="ph ph-magic-wand mr-1"></i>Simulasi Setoran Kasir
+                            <i class="ph ph-magic-wand mr-1"></i>Simulasi Kasir
                         </button>
                     </div>
                     <div class="overflow-x-auto">
@@ -231,43 +247,79 @@
                             </thead>
                             <tbody id="pending-table-body" class="divide-y divide-theme-border text-theme-text">
                                 <!-- Data pending diinjeksi via JS -->
-                                <tr><td colspan="4" class="px-6 py-8 text-center text-theme-muted">Tidak ada setoran tertunda.</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
 
-                <!-- Section: Riwayat Mutasi -->
-                <div class="glass-card overflow-hidden">
-                    <div class="p-5 border-b border-theme-border bg-theme-bg/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                        <h3 class="text-lg font-semibold text-theme-text">Buku Mutasi Kas</h3>
-                        <div class="flex space-x-2">
-                            <button onclick="window.openIncomeModal()" class="px-3 py-1.5 bg-green-500/20 text-green-500 border border-green-500/30 rounded-lg text-sm font-medium hover:bg-green-500/30 transition-colors flex items-center">
-                                <i class="ph ph-plus mr-1"></i> Pemasukan Manual
-                            </button>
+                <!-- Section Split Tables: Income & Expense -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- TABEL PEMASUKAN -->
+                    <div class="glass-card overflow-hidden flex flex-col">
+                        <div class="p-4 border-b border-theme-border bg-theme-bg/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <h3 class="text-lg font-semibold text-green-500 flex items-center"><i class="ph ph-arrow-down-left mr-2"></i> Pemasukan</h3>
+                            <div class="flex items-center space-x-2 w-full sm:w-auto">
+                                <select id="filter-inc-cat" onchange="window.filterTables()" class="bg-theme-bg border border-theme-border rounded-lg px-2 py-1.5 text-xs text-theme-text outline-none w-full sm:w-auto">
+                                    <option value="All">Semua Kategori</option>
+                                    <!-- Injeksi JS -->
+                                </select>
+                                <button onclick="window.openIncomeModal()" class="px-3 py-1.5 bg-green-500/20 text-green-500 border border-green-500/30 rounded-lg text-sm font-medium hover:bg-green-500/30 transition-colors whitespace-nowrap shadow-[0_0_8px_rgba(16,185,129,0.2)]">
+                                    + Manual
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto flex-1">
+                            <table class="w-full text-left whitespace-nowrap">
+                                <thead class="bg-theme-card text-xs font-semibold text-theme-muted uppercase">
+                                    <tr>
+                                        <th class="px-4 py-3">Tanggal</th>
+                                        <th class="px-4 py-3">Kategori</th>
+                                        <th class="px-4 py-3 text-right">Nominal</th>
+                                        <th class="px-4 py-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="income-table-body" class="divide-y divide-theme-border text-theme-text text-sm">
+                                    <!-- Data riwayat injeksi JS -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left whitespace-nowrap">
-                            <thead class="bg-theme-card text-xs font-semibold text-theme-muted uppercase">
-                                <tr>
-                                    <th class="px-6 py-4">Tanggal</th>
-                                    <th class="px-6 py-4">Tipe</th>
-                                    <th class="px-6 py-4">Kategori</th>
-                                    <th class="px-6 py-4">Keterangan</th>
-                                    <th class="px-6 py-4 text-right">Pemasukan</th>
-                                    <th class="px-6 py-4 text-right">Pengeluaran</th>
-                                </tr>
-                            </thead>
-                            <tbody id="mutasi-table-body" class="divide-y divide-theme-border text-theme-text">
-                                <!-- Data riwayat diinjeksi via JS -->
-                            </tbody>
-                        </table>
+
+                    <!-- TABEL PENGELUARAN -->
+                    <div class="glass-card overflow-hidden flex flex-col">
+                        <div class="p-4 border-b border-theme-border bg-theme-bg/50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                            <h3 class="text-lg font-semibold text-red-500 flex items-center"><i class="ph ph-arrow-up-right mr-2"></i> Pengeluaran</h3>
+                            <div class="flex items-center space-x-2 w-full sm:w-auto">
+                                <select id="filter-exp-cat" onchange="window.filterTables()" class="bg-theme-bg border border-theme-border rounded-lg px-2 py-1.5 text-xs text-theme-text outline-none w-full sm:w-auto">
+                                    <option value="All">Semua Kategori</option>
+                                    <!-- Injeksi JS -->
+                                </select>
+                                <button onclick="window.openExpenseModal()" class="px-3 py-1.5 bg-theme-accent text-white md:text-theme-bg rounded-lg text-sm font-bold hover:bg-theme-hover transition-colors whitespace-nowrap shadow-[0_0_8px_var(--accent-light)]">
+                                    + Catat Baru
+                                </button>
+                            </div>
+                        </div>
+                        <div class="overflow-x-auto flex-1">
+                            <table class="w-full text-left whitespace-nowrap">
+                                <thead class="bg-theme-card text-xs font-semibold text-theme-muted uppercase">
+                                    <tr>
+                                        <th class="px-4 py-3">Tanggal</th>
+                                        <th class="px-4 py-3">Kategori</th>
+                                        <th class="px-4 py-3 text-right">Nominal</th>
+                                        <th class="px-4 py-3 text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="expense-table-body" class="divide-y divide-theme-border text-theme-text text-sm">
+                                    <!-- Data riwayat injeksi JS -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
                 </div>
             </div>
 
-            <!-- TAB: PENGATURAN -->
             <div id="tab-settings" class="tab-content max-w-4xl mx-auto space-y-6">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     
@@ -300,11 +352,11 @@
         </main>
     </div>
 
-    <!-- MODAL PENGELUARAN -->
+    <!-- MODAL PENGELUARAN (Bisa Edit) -->
     <div id="expense-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm justify-center items-center p-4 z-50 overflow-y-auto">
         <div class="bg-theme-card rounded-2xl w-full max-w-2xl border border-theme-accent/30 shadow-2xl my-auto">
             <div class="p-5 border-b border-theme-border flex justify-between items-center bg-theme-bg rounded-t-2xl">
-                <h3 class="text-lg font-bold text-theme-accent flex items-center"><i class="ph ph-arrow-up-right mr-2"></i> Catat Pengeluaran</h3>
+                <h3 id="exp-modal-title" class="text-lg font-bold text-theme-accent flex items-center"><i class="ph ph-arrow-up-right mr-2"></i> Catat Pengeluaran</h3>
                 <button onclick="window.closeModal('expense-modal')" class="text-theme-muted hover:text-theme-text"><i class="ph ph-x text-xl"></i></button>
             </div>
             
@@ -316,6 +368,8 @@
                 </div>
 
                 <form id="expense-form" class="space-y-4">
+                    <input type="hidden" id="exp-edit-id" value=""> <!-- Penanda Mode Edit -->
+                    
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm text-theme-muted mb-1">Tanggal</label>
@@ -349,7 +403,7 @@
                                 <div class="col-span-4 text-right">Harga (Rp)</div>
                                 <div class="col-span-1"></div>
                             </div>
-                            <div id="bulk-items-container" class="p-2 space-y-2">
+                            <div id="bulk-items-container" class="p-2 space-y-2 max-h-48 overflow-y-auto">
                                 <!-- Baris bulk JS injeksi -->
                             </div>
                             <div class="p-3 border-t border-theme-border bg-theme-card flex justify-between items-center">
@@ -361,21 +415,22 @@
 
                     <div class="flex space-x-3 pt-4 border-t border-theme-border">
                         <button type="button" onclick="window.closeModal('expense-modal')" class="flex-1 px-4 py-3 bg-theme-bg border border-theme-border text-theme-text rounded-xl hover:bg-theme-card transition-all font-medium">Batal</button>
-                        <button type="submit" id="btn-submit-exp" class="flex-1 px-4 py-3 bg-theme-accent text-white md:text-theme-bg font-bold rounded-xl hover:bg-theme-hover transition-all">Simpan Pengeluaran</button>
+                        <button type="submit" id="btn-submit-exp" class="flex-1 px-4 py-3 bg-theme-accent text-white md:text-theme-bg font-bold rounded-xl hover:bg-theme-hover transition-all">Simpan</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- MODAL PEMASUKAN MANUAL -->
+    <!-- MODAL PEMASUKAN (Bisa Edit) -->
     <div id="income-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm justify-center items-center p-4 z-50">
         <div class="bg-theme-card rounded-2xl w-full max-w-md border border-green-500/30 shadow-2xl">
             <div class="p-5 border-b border-theme-border flex justify-between items-center bg-theme-bg rounded-t-2xl">
-                <h3 class="text-lg font-bold text-green-500 flex items-center"><i class="ph ph-arrow-down-left mr-2"></i> Pemasukan Manual</h3>
+                <h3 id="inc-modal-title" class="text-lg font-bold text-green-500 flex items-center"><i class="ph ph-arrow-down-left mr-2"></i> Pemasukan Manual</h3>
                 <button onclick="window.closeModal('income-modal')" class="text-theme-muted hover:text-theme-text"><i class="ph ph-x text-xl"></i></button>
             </div>
             <form id="income-form" class="p-6 space-y-4">
+                <input type="hidden" id="inc-edit-id" value=""> <!-- Penanda Mode Edit -->
                 <div>
                     <label class="block text-sm text-theme-muted mb-1">Tanggal</label>
                     <input type="date" id="inc-date" required class="w-full bg-theme-bg border border-theme-border rounded-xl px-4 py-2.5 text-theme-text outline-none focus:border-green-500"/>
@@ -396,7 +451,7 @@
                 </div>
                 <div class="flex space-x-3 pt-4 border-t border-theme-border">
                     <button type="button" onclick="window.closeModal('income-modal')" class="flex-1 px-4 py-3 bg-theme-bg border border-theme-border text-theme-text rounded-xl hover:bg-theme-card transition-all font-medium">Batal</button>
-                    <button type="submit" id="btn-submit-inc" class="flex-1 px-4 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-500 transition-all">Simpan Pemasukan</button>
+                    <button type="submit" id="btn-submit-inc" class="flex-1 px-4 py-3 bg-green-600 text-white font-bold rounded-xl hover:bg-green-500 transition-all">Simpan</button>
                 </div>
             </form>
         </div>
@@ -426,10 +481,29 @@
         let pendingDeposits = [];
         let expenseMode = 'single'; // 'single' atau 'bulk'
 
-        // Utility: Format Rupiah
+        // Palet Warna Kategori Dinamis
+        const catColors = [
+            'bg-emerald-500/10 text-emerald-500 border-emerald-500/30',
+            'bg-indigo-500/10 text-indigo-400 border-indigo-500/30',
+            'bg-rose-500/10 text-rose-400 border-rose-500/30',
+            'bg-amber-500/10 text-amber-500 border-amber-500/30',
+            'bg-cyan-500/10 text-cyan-400 border-cyan-500/30',
+            'bg-fuchsia-500/10 text-fuchsia-400 border-fuchsia-500/30',
+            'bg-blue-500/10 text-blue-400 border-blue-500/30',
+            'bg-orange-500/10 text-orange-400 border-orange-500/30',
+        ];
+        
+        // Hashing text to get consistent color index
+        const getCatColorClass = (name) => {
+            if(!name) return catColors[0];
+            let hash = 0;
+            for(let i=0; i<name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+            return catColors[Math.abs(hash) % catColors.length];
+        };
+
+        // Utility
         const formatRp = (angka) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(angka || 0);
         
-        // Utility: Toast Notification
         window.showToast = (message, type = 'success') => {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -439,7 +513,6 @@
             setTimeout(() => { toast.style.animation = 'fadeOut 0.3s forwards'; setTimeout(() => toast.remove(), 300); }, 3000);
         };
 
-        // Utility: Theme Switcher
         window.toggleTheme = () => {
             const body = document.body;
             const currentTheme = body.getAttribute('data-theme');
@@ -447,20 +520,14 @@
             body.setAttribute('data-theme', newTheme);
             localStorage.setItem('quillduck-theme', newTheme);
             
-            // Update Icon
             const icon = document.getElementById('theme-icon');
             const text = document.getElementById('theme-text');
-            if(newTheme === 'dark') {
-                icon.className = 'ph ph-palette text-xl'; text.innerText = 'Tema Dark';
-            } else {
-                icon.className = 'ph ph-flower-lotus text-xl'; text.innerText = 'Tema Soft';
-            }
+            if(newTheme === 'dark') { icon.className = 'ph ph-palette text-xl'; text.innerText = 'Tema Dark'; } 
+            else { icon.className = 'ph ph-flower-lotus text-xl'; text.innerText = 'Tema Soft'; }
             
-            // Redraw charts for new colors
-            renderCharts();
+            if(window.chartData) renderCharts();
         };
 
-        // Initialize Theme from LocalStorage
         const savedTheme = localStorage.getItem('quillduck-theme') || 'dark';
         document.body.setAttribute('data-theme', savedTheme);
         if(savedTheme === 'pink') {
@@ -468,11 +535,16 @@
             document.getElementById('theme-text').innerText = 'Tema Soft';
         }
 
+        // Init Default Date Dashboard
+        const today = new Date();
+        const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+        document.getElementById('dash-start').value = firstDay.toISOString().split('T')[0];
+        document.getElementById('dash-end').value = today.toISOString().split('T')[0];
+
         try {
             app = initializeApp(firebaseConfig);
             db = getFirestore(app);
 
-            // Kita gunakan collection di root karena ini project custom user.
             const colMutations = collection(db, 'finance_mutations');
             const colCategories = collection(db, 'finance_categories');
             const colDeposits = collection(db, 'cashier_deposits');
@@ -486,12 +558,7 @@
                     categories.push(cat);
                     if(cat.name === 'Setoran' && cat.type === 'income') hasSetoran = true;
                 });
-                
-                // Auto-create 'Setoran' if not exist (permanent)
-                if(!hasSetoran && snap.empty !== undefined) {
-                    addDoc(colCategories, { name: 'Setoran', type: 'income', isPermanent: true });
-                }
-
+                if(!hasSetoran && snap.empty !== undefined) addDoc(colCategories, { name: 'Setoran', type: 'income', isPermanent: true });
                 renderCategoriesUI();
             }, (err) => console.error("Error Categories:", err));
 
@@ -499,25 +566,22 @@
             onSnapshot(colMutations, (snap) => {
                 mutations = [];
                 snap.forEach(d => mutations.push({ id: d.id, ...d.data() }));
-                
-                // Sort by date desc
                 mutations.sort((a, b) => new Date(b.date) - new Date(a.date));
                 
-                renderDashboard();
-                renderMutasiTable();
+                calculateTotalKas();
+                window.applyDashboardFilter(); // Calculate Dashboard with Dates
+                window.filterTables(); // Calculate Mutasi Tables with Categories
                 
                 document.getElementById('global-loading').classList.add('hidden');
                 document.getElementById('dashboard-content').classList.remove('hidden');
             }, (err) => console.error("Error Mutations:", err));
 
-            // 3. Listen Pending Deposits (Setoran Kasir)
+            // 3. Listen Pending Deposits
             onSnapshot(colDeposits, (snap) => {
                 pendingDeposits = [];
                 snap.forEach(d => {
                     const data = d.data();
-                    if(data.status === 'pending') {
-                        pendingDeposits.push({ id: d.id, ...data });
-                    }
+                    if(data.status === 'pending') pendingDeposits.push({ id: d.id, ...data });
                 });
                 pendingDeposits.sort((a, b) => new Date(a.date) - new Date(b.date));
                 renderPendingTable();
@@ -525,7 +589,7 @@
 
         } catch(err) {
             console.error("Firebase Gagal Load:", err);
-            document.getElementById('global-loading').innerHTML = `<span class="text-red-500">Gagal terhubung ke database. Periksa koneksi/konfigurasi.</span>`;
+            document.getElementById('global-loading').innerHTML = `<span class="text-red-500">Gagal terhubung ke database. Periksa konfigurasi.</span>`;
         }
 
         window.switchTab = (tabId) => {
@@ -535,38 +599,43 @@
             document.querySelectorAll('.nav-btn').forEach(btn => {
                 btn.className = "nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl text-theme-muted hover:text-theme-accent hover:bg-theme-light border border-transparent font-medium transition-all";
             });
-            const activeBtn = document.getElementById(`nav-${tabId}`);
-            activeBtn.className = "nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-theme-light text-theme-accent border border-theme-border font-medium transition-all";
+            document.getElementById(`nav-${tabId}`).className = "nav-btn w-full flex items-center space-x-3 px-4 py-3 rounded-xl bg-theme-light text-theme-accent border border-theme-border font-medium transition-all";
             
-            const titles = { 'dashboard': 'Ringkasan Finansial', 'mutasi': 'Mutasi Kas & Konfirmasi', 'settings': 'Pengaturan Kategori' };
+            const titles = { 'dashboard': 'Ringkasan Finansial', 'mutasi': 'Mutasi Kas Harian', 'settings': 'Pengaturan Sistem' };
             document.getElementById('header-title').innerText = titles[tabId];
         };
 
-        const renderDashboard = () => {
-            let totalInc = 0;
-            let totalExp = 0;
-            const expByCat = {};
-            const last7Days = {};
+        window.applyDashboardFilter = () => {
+            const startStr = document.getElementById('dash-start').value;
+            const endStr = document.getElementById('dash-end').value;
             
-            // Init 7 days struct
-            for(let i=6; i>=0; i--) {
-                const d = new Date(); d.setDate(d.getDate() - i);
-                const ds = d.toISOString().split('T')[0];
-                last7Days[ds] = { inc: 0, exp: 0 };
-            }
+            let totalInc = 0; let totalExp = 0;
+            const expByCat = {};
+            const dateMap = {}; // Untuk grafik garis
 
-            mutations.forEach(m => {
+            // Filter
+            const filtered = mutations.filter(m => {
+                if(startStr && m.date < startStr) return false;
+                if(endStr && m.date > endStr) return false;
+                return true;
+            });
+
+            // Grouping data
+            filtered.forEach(m => {
                 const amt = Number(m.amount) || 0;
+                if(!dateMap[m.date]) dateMap[m.date] = { inc: 0, exp: 0 };
+                
                 if(m.type === 'income') {
                     totalInc += amt;
-                    if(last7Days[m.date]) last7Days[m.date].inc += amt;
+                    dateMap[m.date].inc += amt;
                 } else if(m.type === 'expense') {
                     totalExp += amt;
                     expByCat[m.category] = (expByCat[m.category] || 0) + amt;
-                    if(last7Days[m.date]) last7Days[m.date].exp += amt;
+                    dateMap[m.date].exp += amt;
                 }
             });
 
+            // Update KPI
             document.getElementById('txt-revenue').innerText = formatRp(totalInc);
             document.getElementById('txt-expense').innerText = formatRp(totalExp);
             
@@ -575,10 +644,13 @@
             elProfit.innerText = formatRp(profit);
             elProfit.className = profit >= 0 ? "text-3xl font-bold text-theme-accent" : "text-3xl font-bold text-red-500";
 
-            // Prepare Chart Data
-            const labelsLine = Object.keys(last7Days).map(d => d.substring(5)); // MM-DD
-            const dataIncLine = Object.values(last7Days).map(v => v.inc);
-            const dataExpLine = Object.values(last7Days).map(v => v.exp);
+            // Sorting Dates for Chart
+            const sortedDates = Object.keys(dateMap).sort();
+            const labelsLine = sortedDates.map(d => {
+                const [y,m,day] = d.split('-'); return `${day}/${m}`; // Format DD/MM
+            });
+            const dataIncLine = sortedDates.map(d => dateMap[d].inc);
+            const dataExpLine = sortedDates.map(d => dateMap[d].exp);
             
             const labelsPie = Object.keys(expByCat);
             const dataPie = Object.values(expByCat);
@@ -587,14 +659,21 @@
             renderCharts();
         };
 
+        // TOTAL KAS UTAMA (Bebas dari filter tanggal)
+        const calculateTotalKas = () => {
+            let total = 0;
+            mutations.forEach(m => { total += (m.type === 'income' ? m.amount : -m.amount); });
+            document.getElementById('total-kas-display').innerText = formatRp(total);
+        }
+
         const renderCharts = () => {
             if(!window.chartData) return;
             const { labelsLine, dataIncLine, dataExpLine, labelsPie, dataPie } = window.chartData;
             
             const isPink = document.body.getAttribute('data-theme') === 'pink';
-            const colorInc = isPink ? '#ec4899' : '#d4af37'; // accent
-            const colorExp = '#ef4444'; // red
-            const textColor = isPink ? '#831843' : '#9ca3af'; // muted
+            const colorInc = isPink ? '#ec4899' : '#d4af37';
+            const colorExp = '#ef4444';
+            const textColor = isPink ? '#831843' : '#9ca3af';
             const pieColors = isPink ? ['#ec4899', '#f472b6', '#fbcfe8', '#db2777', '#9d174d'] : ['#d4af37', '#f6d982', '#806921', '#f2ca51', '#aa8c2c'];
 
             Chart.defaults.color = textColor;
@@ -606,10 +685,10 @@
             financeChart = new Chart(ctxLine, {
                 type: 'line',
                 data: {
-                    labels: labelsLine,
+                    labels: labelsLine.length ? labelsLine : ['Data Kosong'],
                     datasets: [
-                        { label: 'Pemasukan', data: dataIncLine, borderColor: colorInc, backgroundColor: colorInc+'20', fill: true, tension: 0.4 },
-                        { label: 'Pengeluaran', data: dataExpLine, borderColor: colorExp, backgroundColor: 'transparent', borderDash: [5, 5], tension: 0.4 }
+                        { label: 'Pemasukan', data: dataIncLine.length?dataIncLine:[0], borderColor: colorInc, backgroundColor: colorInc+'20', fill: true, tension: 0.4 },
+                        { label: 'Pengeluaran', data: dataExpLine.length?dataExpLine:[0], borderColor: colorExp, backgroundColor: 'transparent', borderDash: [5, 5], tension: 0.4 }
                     ]
                 },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } }
@@ -620,11 +699,9 @@
             const msgEmpty = document.getElementById('empty-chart-msg');
             
             if(labelsPie.length === 0) {
-                msgEmpty.classList.remove('hidden');
-                document.getElementById('expenseChart').style.display = 'none';
+                msgEmpty.classList.remove('hidden'); document.getElementById('expenseChart').style.display = 'none';
             } else {
-                msgEmpty.classList.add('hidden');
-                document.getElementById('expenseChart').style.display = 'block';
+                msgEmpty.classList.add('hidden'); document.getElementById('expenseChart').style.display = 'block';
                 if(expenseChart) expenseChart.destroy();
                 expenseChart = new Chart(ctxPie, {
                     type: 'doughnut',
@@ -634,53 +711,76 @@
             }
         };
 
-        const renderMutasiTable = () => {
-            let tbody = '';
-            if(mutations.length === 0) {
-                tbody = `<tr><td colspan="6" class="px-6 py-8 text-center text-theme-muted">Belum ada mutasi kas.</td></tr>`;
-            } else {
-                mutations.forEach(m => {
-                    const isInc = m.type === 'income';
-                    const badgeClass = isInc ? 'bg-green-500/20 text-green-500' : 'bg-red-500/20 text-red-500';
-                    const icon = isInc ? 'ph-arrow-down-left' : 'ph-arrow-up-right';
-                    
-                    let descHtml = `<span class="text-theme-muted">${m.description || '-'}</span>`;
-                    if(m.items && m.items.length > 0) {
-                        descHtml = `<details class="cursor-pointer text-sm"><summary class="text-theme-accent font-medium outline-none">Lihat ${m.items.length} Item (Bulk)</summary><ul class="mt-2 space-y-1 ml-4 list-disc text-theme-muted text-xs">`;
-                        m.items.forEach(it => descHtml += `<li>${it.name} - ${formatRp(it.price)}</li>`);
-                        descHtml += `</ul></details>`;
-                    }
+        window.filterTables = () => {
+            const incFilter = document.getElementById('filter-inc-cat').value;
+            const expFilter = document.getElementById('filter-exp-cat').value;
 
-                    tbody += `
+            // Render Income Table
+            const incMutations = mutations.filter(m => m.type === 'income' && (incFilter === 'All' || m.category === incFilter));
+            let incHtml = '';
+            if(!incMutations.length) incHtml = `<tr><td colspan="4" class="px-4 py-8 text-center text-theme-muted">Kosong</td></tr>`;
+            else {
+                incMutations.forEach(m => {
+                    const badge = `<span class="px-2 py-1 rounded-md text-xs font-semibold border ${getCatColorClass(m.category)}">${m.category}</span>`;
+                    incHtml += `
                         <tr class="hover:bg-theme-bg/50 border-t border-theme-border transition-colors">
-                            <td class="px-6 py-4">${m.date}</td>
-                            <td class="px-6 py-4"><span class="px-2.5 py-1 ${badgeClass} rounded-md text-xs font-bold flex items-center w-max"><i class="ph ${icon} mr-1"></i>${isInc?'Masuk':'Keluar'}</span></td>
-                            <td class="px-6 py-4 font-medium text-theme-text">${m.category}</td>
-                            <td class="px-6 py-4 max-w-xs truncate">${descHtml}</td>
-                            <td class="px-6 py-4 text-right font-bold text-green-500">${isInc ? formatRp(m.amount) : '-'}</td>
-                            <td class="px-6 py-4 text-right font-bold text-red-500">${!isInc ? formatRp(m.amount) : '-'}</td>
+                            <td class="px-4 py-3">${m.date}</td>
+                            <td class="px-4 py-3">${badge}</td>
+                            <td class="px-4 py-3 text-right font-bold text-green-500">${formatRp(m.amount)}
+                                <div class="text-[10px] text-theme-muted font-normal mt-0.5 max-w-[150px] truncate ml-auto">${m.description || '-'}</div>
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                                <button onclick="window.editIncome('${m.id}')" class="text-theme-muted hover:text-theme-accent p-1 transition-colors"><i class="ph ph-pencil-simple text-lg"></i></button>
+                            </td>
                         </tr>
                     `;
                 });
             }
-            document.getElementById('mutasi-table-body').innerHTML = tbody;
+            document.getElementById('income-table-body').innerHTML = incHtml;
+
+            // Render Expense Table
+            const expMutations = mutations.filter(m => m.type === 'expense' && (expFilter === 'All' || m.category === expFilter));
+            let expHtml = '';
+            if(!expMutations.length) expHtml = `<tr><td colspan="4" class="px-4 py-8 text-center text-theme-muted">Kosong</td></tr>`;
+            else {
+                expMutations.forEach(m => {
+                    const badge = `<span class="px-2 py-1 rounded-md text-xs font-semibold border ${getCatColorClass(m.category)}">${m.category}</span>`;
+                    let descText = m.description || '-';
+                    if(m.items && m.items.length > 0) {
+                        descText = `<details class="cursor-pointer group"><summary class="text-theme-accent group-hover:underline outline-none">Nota Bulk (${m.items.length} item)</summary><ul class="mt-1 space-y-1 ml-4 list-disc text-theme-muted text-[10px]">`;
+                        m.items.forEach(it => descText += `<li>${it.name} : ${formatRp(it.price)}</li>`);
+                        descText += `</ul></details>`;
+                    }
+
+                    expHtml += `
+                        <tr class="hover:bg-theme-bg/50 border-t border-theme-border transition-colors">
+                            <td class="px-4 py-3">${m.date}</td>
+                            <td class="px-4 py-3">${badge}</td>
+                            <td class="px-4 py-3 text-right font-bold text-red-500">${formatRp(m.amount)}
+                                <div class="text-[10px] text-theme-muted font-normal mt-0.5 max-w-[180px] truncate ml-auto whitespace-normal">${descText}</div>
+                            </td>
+                            <td class="px-4 py-3 text-center">
+                                <button onclick="window.editExpense('${m.id}')" class="text-theme-muted hover:text-theme-accent p-1 transition-colors"><i class="ph ph-pencil-simple text-lg"></i></button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            }
+            document.getElementById('expense-table-body').innerHTML = expHtml;
         };
 
         const renderPendingTable = () => {
             let tbody = '';
-            if(pendingDeposits.length === 0) {
-                tbody = `<tr><td colspan="4" class="px-6 py-8 text-center text-theme-muted">Semua setoran sudah dikonfirmasi.</td></tr>`;
-            } else {
+            if(pendingDeposits.length === 0) tbody = `<tr><td colspan="4" class="px-6 py-8 text-center text-theme-muted">Tidak ada setoran.</td></tr>`;
+            else {
                 pendingDeposits.forEach(d => {
                     tbody += `
                         <tr class="border-t border-theme-border bg-theme-bg/30">
                             <td class="px-6 py-4 text-theme-text">${d.date} <span class="text-xs text-theme-muted ml-2">${d.time||''}</span></td>
-                            <td class="px-6 py-4 text-theme-muted">${d.cashierName || 'Kasir (Shift)'}</td>
+                            <td class="px-6 py-4 text-theme-muted">${d.cashierName || 'Kasir'}</td>
                             <td class="px-6 py-4 text-right font-bold text-yellow-500">${formatRp(d.amount)}</td>
                             <td class="px-6 py-4 text-center">
-                                <button onclick="window.confirmDeposit('${d.id}', ${d.amount}, '${d.date}')" class="px-4 py-2 bg-theme-accent text-white md:text-theme-bg rounded-lg text-sm font-bold shadow hover:scale-105 transition-transform">
-                                    <i class="ph ph-check-circle mr-1"></i>Terima
-                                </button>
+                                <button onclick="window.confirmDeposit('${d.id}', ${d.amount}, '${d.date}')" class="px-4 py-2 bg-theme-accent text-white md:text-theme-bg rounded-lg text-sm font-bold shadow hover:scale-105 transition-transform"><i class="ph ph-check-circle mr-1"></i>Terima</button>
                             </td>
                         </tr>
                     `;
@@ -694,70 +794,111 @@
             const expList = document.getElementById('expense-category-list');
             const expSelect = document.getElementById('exp-category');
             const incSelect = document.getElementById('inc-category');
+            const filterInc = document.getElementById('filter-inc-cat');
+            const filterExp = document.getElementById('filter-exp-cat');
             
             incList.innerHTML = ''; expList.innerHTML = '';
             expSelect.innerHTML = ''; incSelect.innerHTML = '';
+            filterInc.innerHTML = '<option value="All">Semua Kategori</option>';
+            filterExp.innerHTML = '<option value="All">Semua Kategori</option>';
 
             categories.forEach(c => {
                 const li = document.createElement('li');
                 li.className = "flex justify-between items-center p-3 bg-theme-bg rounded-xl border border-theme-border";
                 let btnHtml = c.isPermanent ? `<span class="text-xs text-theme-muted bg-theme-card px-2 py-1 rounded">Permanen</span>` : `<button onclick="window.deleteCategory('${c.id}')" class="text-red-500 hover:text-red-400 p-1"><i class="ph ph-trash"></i></button>`;
-                li.innerHTML = `<span class="text-theme-text font-medium">${c.name}</span> ${btnHtml}`;
+                li.innerHTML = `<span class="text-theme-text font-medium flex items-center"><span class="w-2.5 h-2.5 rounded-full mr-2 ${getCatColorClass(c.name).split(' ')[0]}"></span>${c.name}</span> ${btnHtml}`;
                 
                 if(c.type === 'income') {
                     incList.appendChild(li);
                     incSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+                    filterInc.innerHTML += `<option value="${c.name}">${c.name}</option>`;
                 } else {
                     expList.appendChild(li);
                     expSelect.innerHTML += `<option value="${c.name}">${c.name}</option>`;
+                    filterExp.innerHTML += `<option value="${c.name}">${c.name}</option>`;
                 }
             });
+            window.filterTables();
         };
 
-        // Modals
-        window.openExpenseModal = () => {
-            document.getElementById('expense-modal').classList.remove('hidden');
-            document.getElementById('expense-modal').classList.add('flex');
-            document.getElementById('exp-date').value = new Date().toISOString().split('T')[0];
-            window.setExpenseMode('single');
+        window.openExpenseModal = (isEdit = false) => {
+            document.getElementById('expense-modal').classList.remove('hidden'); document.getElementById('expense-modal').classList.add('flex');
+            if(!isEdit) {
+                document.getElementById('exp-modal-title').innerHTML = '<i class="ph ph-arrow-up-right mr-2"></i> Catat Pengeluaran';
+                document.getElementById('expense-form').reset();
+                document.getElementById('exp-edit-id').value = '';
+                document.getElementById('exp-date').value = new Date().toISOString().split('T')[0];
+                window.setExpenseMode('single');
+                bulkItems = [{name:'', price:''}]; window.renderBulkItems();
+            }
         };
-        window.openIncomeModal = () => {
-            document.getElementById('income-modal').classList.remove('hidden');
-            document.getElementById('income-modal').classList.add('flex');
-            document.getElementById('inc-date').value = new Date().toISOString().split('T')[0];
+
+        window.editExpense = (id) => {
+            const mut = mutations.find(m => m.id === id);
+            if(!mut) return;
+            document.getElementById('exp-modal-title').innerHTML = '<i class="ph ph-pencil-simple mr-2"></i> Edit Pengeluaran';
+            document.getElementById('exp-edit-id').value = mut.id;
+            document.getElementById('exp-date').value = mut.date;
+            document.getElementById('exp-category').value = mut.category;
+            
+            if(mut.items && mut.items.length > 0) {
+                window.setExpenseMode('bulk');
+                bulkItems = [...mut.items]; // clone
+                window.renderBulkItems();
+            } else {
+                window.setExpenseMode('single');
+                document.getElementById('exp-amount').value = mut.amount;
+                document.getElementById('exp-desc').value = mut.description;
+            }
+            window.openExpenseModal(true);
+        }
+
+        window.openIncomeModal = (isEdit = false) => {
+            document.getElementById('income-modal').classList.remove('hidden'); document.getElementById('income-modal').classList.add('flex');
+            if(!isEdit) {
+                document.getElementById('inc-modal-title').innerHTML = '<i class="ph ph-arrow-down-left mr-2"></i> Pemasukan Manual';
+                document.getElementById('income-form').reset();
+                document.getElementById('inc-edit-id').value = '';
+                document.getElementById('inc-date').value = new Date().toISOString().split('T')[0];
+            }
         };
+
+        window.editIncome = (id) => {
+            const mut = mutations.find(m => m.id === id);
+            if(!mut) return;
+            document.getElementById('inc-modal-title').innerHTML = '<i class="ph ph-pencil-simple mr-2"></i> Edit Pemasukan';
+            document.getElementById('inc-edit-id').value = mut.id;
+            document.getElementById('inc-date').value = mut.date;
+            document.getElementById('inc-category').value = mut.category;
+            document.getElementById('inc-amount').value = mut.amount;
+            document.getElementById('inc-desc').value = mut.description;
+            window.openIncomeModal(true);
+        }
+
         window.closeModal = (id) => {
-            document.getElementById(id).classList.add('hidden');
-            document.getElementById(id).classList.remove('flex');
-            if(id === 'expense-modal') { document.getElementById('expense-form').reset(); bulkItems = [{name:'', price:''}]; renderBulkItems(); }
-            if(id === 'income-modal') document.getElementById('income-form').reset();
+            document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex');
         };
 
-        // Mode Input Expense (Single/Bulk)
+        // Bulk Mode
         window.setExpenseMode = (mode) => {
             expenseMode = mode;
-            const btnSingle = document.getElementById('btn-mode-single');
-            const btnBulk = document.getElementById('btn-mode-bulk');
-            const viewSingle = document.getElementById('expense-single-view');
-            const viewBulk = document.getElementById('expense-bulk-view');
+            const btnS = document.getElementById('btn-mode-single'); const btnB = document.getElementById('btn-mode-bulk');
+            const vS = document.getElementById('expense-single-view'); const vB = document.getElementById('expense-bulk-view');
 
             if(mode === 'single') {
-                btnSingle.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-theme-card text-theme-accent shadow";
-                btnBulk.className = "flex-1 py-2 text-sm font-medium rounded-lg text-theme-muted hover:text-theme-text";
-                viewSingle.classList.remove('hidden'); viewBulk.classList.add('hidden');
-                document.getElementById('exp-amount').required = true;
-                document.getElementById('exp-desc').required = true;
+                btnS.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-theme-card text-theme-accent shadow";
+                btnB.className = "flex-1 py-2 text-sm font-medium rounded-lg text-theme-muted hover:text-theme-text";
+                vS.classList.remove('hidden'); vB.classList.add('hidden');
+                document.getElementById('exp-amount').required = true; document.getElementById('exp-desc').required = true;
             } else {
-                btnBulk.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-theme-card text-theme-accent shadow";
-                btnSingle.className = "flex-1 py-2 text-sm font-medium rounded-lg text-theme-muted hover:text-theme-text";
-                viewBulk.classList.remove('hidden'); viewSingle.classList.add('hidden');
-                document.getElementById('exp-amount').required = false;
-                document.getElementById('exp-desc').required = false;
+                btnB.className = "flex-1 py-2 text-sm font-medium rounded-lg bg-theme-card text-theme-accent shadow";
+                btnS.className = "flex-1 py-2 text-sm font-medium rounded-lg text-theme-muted hover:text-theme-text";
+                vB.classList.remove('hidden'); vS.classList.add('hidden');
+                document.getElementById('exp-amount').required = false; document.getElementById('exp-desc').required = false;
                 if(bulkItems.length === 0) window.addBulkRow();
             }
         };
 
-        // Bulk Input Logic
         let bulkItems = [{name: '', price: ''}];
         window.renderBulkItems = () => {
             const cont = document.getElementById('bulk-items-container');
@@ -766,15 +907,9 @@
                 total += Number(item.price) || 0;
                 return `
                 <div class="grid grid-cols-12 gap-2 items-center">
-                    <div class="col-span-7">
-                        <input type="text" value="${item.name}" oninput="window.updateBulkItem(${idx}, 'name', this.value)" placeholder="Nama barang" class="w-full bg-theme-card border border-theme-border rounded-lg px-3 py-1.5 text-sm text-theme-text outline-none focus:border-theme-accent">
-                    </div>
-                    <div class="col-span-4">
-                        <input type="number" value="${item.price}" oninput="window.updateBulkItem(${idx}, 'price', this.value)" placeholder="Harga" class="w-full bg-theme-card border border-theme-border rounded-lg px-3 py-1.5 text-sm text-theme-text outline-none focus:border-theme-accent">
-                    </div>
-                    <div class="col-span-1 text-center">
-                        <button type="button" onclick="window.removeBulkRow(${idx})" class="text-red-500 hover:text-red-400"><i class="ph ph-trash"></i></button>
-                    </div>
+                    <div class="col-span-7"><input type="text" value="${item.name}" oninput="window.updateBulkItem(${idx}, 'name', this.value)" placeholder="Nama barang" class="w-full bg-theme-card border border-theme-border rounded-lg px-3 py-1.5 text-sm text-theme-text outline-none focus:border-theme-accent"></div>
+                    <div class="col-span-4"><input type="number" value="${item.price}" oninput="window.updateBulkItem(${idx}, 'price', this.value)" placeholder="Harga" class="w-full bg-theme-card border border-theme-border rounded-lg px-3 py-1.5 text-sm text-theme-text outline-none focus:border-theme-accent"></div>
+                    <div class="col-span-1 text-center"><button type="button" onclick="window.removeBulkRow(${idx})" class="text-red-500 hover:text-red-400"><i class="ph ph-trash"></i></button></div>
                 </div>
             `}).join('');
             document.getElementById('bulk-total-display').innerText = formatRp(total);
@@ -783,85 +918,87 @@
         window.removeBulkRow = (idx) => { if(bulkItems.length > 1) { bulkItems.splice(idx, 1); renderBulkItems(); } };
         window.updateBulkItem = (idx, field, val) => { bulkItems[idx][field] = val; if(field === 'price') renderBulkItems(); };
 
-        // Submit Pengeluaran
+        // Submit Form Pengeluaran (Create & Edit)
         document.getElementById('expense-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit-exp');
             const origText = btn.innerText; btn.innerText = "Menyimpan..."; btn.disabled = true;
 
             try {
-                const date = document.getElementById('exp-date').value;
-                const category = document.getElementById('exp-category').value;
+                const editId = document.getElementById('exp-edit-id').value;
+                const dataObj = {
+                    type: 'expense',
+                    date: document.getElementById('exp-date').value,
+                    category: document.getElementById('exp-category').value,
+                };
                 
-                let amount = 0;
-                let desc = '';
-                let items = [];
-
                 if(expenseMode === 'single') {
-                    amount = Number(document.getElementById('exp-amount').value);
-                    desc = document.getElementById('exp-desc').value;
+                    dataObj.amount = Number(document.getElementById('exp-amount').value);
+                    dataObj.description = document.getElementById('exp-desc').value;
+                    dataObj.items = []; // reset jika sebelumnya bulk
                 } else {
                     const validItems = bulkItems.filter(i => i.name.trim() !== '' && Number(i.price) > 0);
                     if(validItems.length === 0) throw new Error("Item bulk kosong!");
-                    validItems.forEach(i => amount += Number(i.price));
-                    desc = `Input Bulk (${validItems.length} item)`;
-                    items = validItems.map(i => ({ name: i.name, price: Number(i.price) }));
+                    dataObj.amount = validItems.reduce((acc, curr) => acc + Number(curr.price), 0);
+                    dataObj.description = `Input Bulk (${validItems.length} item)`;
+                    dataObj.items = validItems.map(i => ({ name: i.name, price: Number(i.price) }));
                 }
 
-                await addDoc(collection(db, "finance_mutations"), {
-                    type: 'expense', date, category, amount, description: desc, items, createdAt: new Date().toISOString()
-                });
-                
-                showToast("Pengeluaran berhasil dicatat!");
+                if(editId) {
+                    await updateDoc(doc(db, "finance_mutations", editId), dataObj);
+                    showToast("Pengeluaran berhasil diperbarui!");
+                } else {
+                    dataObj.createdAt = new Date().toISOString();
+                    await addDoc(collection(db, "finance_mutations"), dataObj);
+                    showToast("Pengeluaran baru berhasil dicatat!");
+                }
                 window.closeModal('expense-modal');
-            } catch (err) {
-                showToast("Gagal: " + err.message, 'error');
-            } finally {
-                btn.innerText = origText; btn.disabled = false;
-            }
+            } catch (err) { showToast(err.message, 'error'); } 
+            finally { btn.innerText = origText; btn.disabled = false; }
         });
 
-        // Submit Pemasukan Manual
+        // Submit Form Pemasukan (Create & Edit)
         document.getElementById('income-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const btn = document.getElementById('btn-submit-inc');
             const origText = btn.innerText; btn.innerText = "Menyimpan..."; btn.disabled = true;
 
             try {
-                await addDoc(collection(db, "finance_mutations"), {
+                const editId = document.getElementById('inc-edit-id').value;
+                const dataObj = {
                     type: 'income',
                     date: document.getElementById('inc-date').value,
                     category: document.getElementById('inc-category').value,
                     amount: Number(document.getElementById('inc-amount').value),
-                    description: document.getElementById('inc-desc').value,
-                    createdAt: new Date().toISOString()
-                });
-                showToast("Pemasukan berhasil dicatat!");
+                    description: document.getElementById('inc-desc').value
+                };
+
+                if(editId) {
+                    await updateDoc(doc(db, "finance_mutations", editId), dataObj);
+                    showToast("Pemasukan berhasil diperbarui!");
+                } else {
+                    dataObj.createdAt = new Date().toISOString();
+                    await addDoc(collection(db, "finance_mutations"), dataObj);
+                    showToast("Pemasukan baru berhasil dicatat!");
+                }
                 window.closeModal('income-modal');
-            } catch (err) {
-                showToast("Gagal: " + err.message, 'error');
-            } finally {
-                btn.innerText = origText; btn.disabled = false;
-            }
+            } catch (err) { showToast(err.message, 'error'); } 
+            finally { btn.innerText = origText; btn.disabled = false; }
         });
 
         // Konfirmasi Setoran Kasir -> Masuk Mutasi
         window.confirmDeposit = async (depId, amount, date) => {
             try {
-                // Update status deposit
                 await updateDoc(doc(db, "cashier_deposits", depId), { status: 'confirmed', confirmedAt: new Date().toISOString() });
-                // Buat mutasi
                 await addDoc(collection(db, "finance_mutations"), {
                     type: 'income', date: date, category: 'Setoran', amount: Number(amount),
                     description: `Konfirmasi Setoran Kasir (Ref: ${depId.substring(0,6)})`, createdAt: new Date().toISOString()
                 });
                 showToast("Setoran Kasir Diterima!");
-            } catch(err) {
-                showToast("Gagal terima setoran: " + err.message, 'error');
-            }
+            } catch(err) { showToast(err.message, 'error'); }
         };
 
-        // Manage Categories
+        // Category Management
         window.addCategory = async (type) => {
             const inputId = type === 'income' ? 'new-inc-cat' : 'new-exp-cat';
             const val = document.getElementById(inputId).value.trim();
@@ -870,25 +1007,23 @@
                 await addDoc(collection(db, "finance_categories"), { name: val, type: type, isPermanent: false });
                 document.getElementById(inputId).value = '';
                 showToast("Kategori ditambahkan");
-            } catch(err) { showToast("Gagal: "+err.message, 'error'); }
+            } catch(err) { showToast(err.message, 'error'); }
         };
         window.deleteCategory = async (id) => {
             try { await deleteDoc(doc(db, "finance_categories", id)); showToast("Kategori dihapus"); } 
-            catch(err) { showToast("Gagal hapus: "+err.message, 'error'); }
+            catch(err) { showToast(err.message, 'error'); }
         };
 
-        // DEV: Simulate Cashier Deposit (Button for testing logic)
+        // DEV: Simulate Cashier Deposit
         window.simulateCashierDeposit = async () => {
             try {
                 const now = new Date();
                 await addDoc(collection(db, "cashier_deposits"), {
                     amount: Math.floor(Math.random() * 500000) + 100000,
-                    date: now.toISOString().split('T')[0],
-                    time: now.toTimeString().split(' ')[0].substring(0,5),
-                    status: 'pending',
-                    cashierName: 'Shift ' + (Math.random()>0.5?'Pagi':'Malam')
+                    date: now.toISOString().split('T')[0], time: now.toTimeString().split(' ')[0].substring(0,5),
+                    status: 'pending', cashierName: 'Shift ' + (Math.random()>0.5?'Pagi':'Malam')
                 });
-                showToast("Berhasil simulasi setoran masuk.");
+                showToast("Setoran simulasi kasir ditambahkan.");
             } catch(err) { showToast("Gagal simulasi", 'error'); }
         }
 
