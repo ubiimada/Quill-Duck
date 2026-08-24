@@ -1,0 +1,472 @@
+import React, { useState, useEffect } from 'react';
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell
+} from 'recharts';
+import { 
+  Plus, 
+  TrendingUp, 
+  TrendingDown, 
+  DollarSign, 
+  FileText, 
+  PieChart as PieChartIcon 
+} from 'lucide-react';
+import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc, getDocs, onSnapshot, query, orderBy } from "firebase/firestore";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCRH_6JZoRvKRgbEU_WNNtSOFZ2d83kfys",
+  authDomain: "bebek-emas.firebaseapp.com",
+  projectId: "bebek-emas",
+  storageBucket: "bebek-emas.firebasestorage.app",
+  messagingSenderId: "50335358089",
+  appId: "1:50335358089:web:4cdae41ba35803c5f53a58"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
+
+export default function FinanceDashboard() {
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [revenueData, setRevenueData] = useState([]);
+  const [expenses, setExpenses] = useState([]);
+  const [totalRevenue, setTotalRevenue] = useState(0);
+  
+  const [showExpenseModal, setShowExpenseModal] = useState(false);
+  const [newExpense, setNewExpense] = useState({ date: '', category: 'Bahan Baku', amount: '', description: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [loadingData, setLoadingData] = useState(true);
+
+  useEffect(() => {
+    // 1. Fetch Expenses (Real-time listener)
+    const expensesRef = collection(db, 'finance_expenses');
+    const qExpenses = query(expensesRef, orderBy('date', 'desc'));
+    
+    const unsubscribeExpenses = onSnapshot(qExpenses, (snapshot) => {
+      const expensesList = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setExpenses(expensesList);
+      setLoadingData(false);
+    }, (error) => {
+      console.error("Error fetching expenses: ", error);
+      setLoadingData(false);
+    });
+
+    // 2. Fetch Transactions for Revenue
+    const fetchTransactions = async () => {
+      try {
+        const transactionsRef = collection(db, 'transactions');
+        const snapshot = await getDocs(transactionsRef);
+        let total = 0;
+        
+        const dailyData = {
+          'Mon': 0, 'Tue': 0, 'Wed': 0, 'Thu': 0, 'Fri': 0, 'Sat': 0, 'Sun': 0
+        };
+
+        snapshot.docs.forEach(doc => {
+          const data = doc.data();
+          const amount = data.totalAmount || data.amount || 0; 
+          total += amount;
+
+          const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+          let dayName = 'Mon';
+          if (data.createdAt) {
+             const dateObj = data.createdAt.toDate ? data.createdAt.toDate() : new Date(data.createdAt);
+             dayName = days[dateObj.getDay()];
+          }
+          if (dailyData[dayName] !== undefined) {
+             dailyData[dayName] += amount;
+          }
+        });
+        
+        setTotalRevenue(total);
+
+        const chartData = Object.keys(dailyData).map(day => ({
+          name: day,
+          revenue: dailyData[day]
+        }));
+        
+        if (total === 0) {
+            setRevenueData([
+                { name: 'Mon', revenue: 0 }, { name: 'Tue', revenue: 0 }, { name: 'Wed', revenue: 0 },
+                { name: 'Thu', revenue: 0 }, { name: 'Fri', revenue: 0 }, { name: 'Sat', revenue: 0 }, { name: 'Sun', revenue: 0 }
+            ]);
+        } else {
+            setRevenueData(chartData);
+        }
+      } catch (error) {
+        console.error("Error fetching transactions: ", error);
+        setRevenueData([
+            { name: 'Mon', revenue: 0 }, { name: 'Tue', revenue: 0 }, { name: 'Wed', revenue: 0 },
+            { name: 'Thu', revenue: 0 }, { name: 'Fri', revenue: 0 }, { name: 'Sat', revenue: 0 }, { name: 'Sun', revenue: 0 }
+        ]);
+      }
+    };
+
+    fetchTransactions();
+
+    return () => {
+      unsubscribeExpenses();
+    };
+  }, []);
+
+  const totalExpenses = expenses.reduce((sum, item) => sum + (item.amount || 0), 0);
+  const netProfit = totalRevenue - totalExpenses;
+
+  const expenseCategoryTotals = expenses.reduce((acc, item) => {
+    acc[item.category] = (acc[item.category] || 0) + item.amount;
+    return acc;
+  }, {});
+
+  const EXPENSE_CATEGORIES = Object.keys(expenseCategoryTotals).map(key => ({
+    name: key,
+    value: expenseCategoryTotals[key]
+  }));
+
+  const handleAddExpense = async (e) => {
+    e.preventDefault();
+    if (!newExpense.amount || !newExpense.date) return;
+    setIsSubmitting(true);
+
+    try {
+      await addDoc(collection(db, "finance_expenses"), {
+        date: newExpense.date,
+        category: newExpense.category,
+        amount: parseFloat(newExpense.amount),
+        description: newExpense.description,
+        createdAt: new Date()
+      });
+      
+      setShowExpenseModal(false);
+      setNewExpense({ date: '', category: 'Bahan Baku', amount: '', description: '' });
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(amount);
+  };
+
+  return (
+    <div className="flex h-screen bg-gray-50 text-gray-800 font-sans">
+      
+      {/* Sidebar */}
+      <div className="w-64 bg-white border-r border-gray-200 shadow-sm flex-col hidden md:flex">
+        <div className="p-6 border-b border-gray-100">
+          <h1 className="text-2xl font-bold text-indigo-700 tracking-tight">Pawon Finance</h1>
+          <p className="text-xs text-gray-500 mt-1">Sistem Keuangan Restoran</p>
+        </div>
+        
+        <nav className="flex-1 p-4 space-y-2">
+          <button 
+            onClick={() => setActiveTab('dashboard')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'dashboard' ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-100'}`}
+          >
+            <PieChartIcon size={20} />
+            <span>Ringkasan</span>
+          </button>
+          
+          <button 
+            onClick={() => setActiveTab('expenses')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'expenses' ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-100'}`}
+          >
+            <TrendingDown size={20} />
+            <span>Pengeluaran</span>
+          </button>
+          
+          <button 
+            onClick={() => setActiveTab('reports')}
+            className={`w-full flex items-center space-x-3 px-4 py-3 rounded-xl transition-colors ${activeTab === 'reports' ? 'bg-indigo-50 text-indigo-700 font-semibold' : 'text-gray-600 hover:bg-gray-100'}`}
+          >
+            <FileText size={20} />
+            <span>Laporan</span>
+          </button>
+        </nav>
+      </div>
+
+      <div className="flex-1 flex flex-col overflow-hidden">
+        
+        {/* Header */}
+        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6">
+          <div className="flex items-center md:hidden">
+             <h1 className="text-xl font-bold text-indigo-700">Pawon Finance</h1>
+          </div>
+          <div className="hidden md:block">
+            <h2 className="text-xl font-semibold text-gray-800 capitalize">{activeTab === 'dashboard' ? 'Ringkasan Keuangan' : activeTab}</h2>
+          </div>
+          
+          <div className="flex items-center space-x-4">
+            <button 
+              onClick={() => setShowExpenseModal(true)}
+              className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center space-x-2 transition-colors shadow-sm"
+            >
+              <Plus size={16} />
+              <span className="hidden sm:inline">Catat Pengeluaran</span>
+            </button>
+          </div>
+        </header>
+
+        {/* Main Content */}
+        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-gray-50 p-6">
+          
+          {loadingData ? (
+             <div className="flex justify-center items-center h-full">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-700"></div>
+             </div>
+          ) : (
+            <>
+              {}
+              {activeTab === 'dashboard' && (
+                <div className="space-y-6">
+                  
+                  {/* KPI Cards */}
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-start justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-500 mb-1">Total Pendapatan (POS)</p>
+                        <h3 className="text-2xl font-bold text-gray-900">{formatCurrency(totalRevenue)}</h3>
+                      </div>
+                      <div className="p-3 bg-green-50 text-green-600 rounded-xl">
+                        <TrendingUp size={24} />
+                      </div>
+                    </div>
+                    
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-start justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-500 mb-1">Total Pengeluaran</p>
+                        <h3 className="text-2xl font-bold text-gray-900">{formatCurrency(totalExpenses)}</h3>
+                      </div>
+                      <div className="p-3 bg-red-50 text-red-600 rounded-xl">
+                        <TrendingDown size={24} />
+                      </div>
+                    </div>
+
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 flex items-start justify-between">
+                      <div>
+                        <p className="text-sm font-medium text-gray-500 mb-1">Laba Bersih</p>
+                        <h3 className={`text-2xl font-bold ${netProfit >= 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {formatCurrency(netProfit)}
+                        </h3>
+                      </div>
+                      <div className="p-3 bg-indigo-50 text-indigo-600 rounded-xl">
+                        <DollarSign size={24} />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Charts Area */}
+                  <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    
+                    {/* Revenue Trend Chart */}
+                    <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-4">Tren Pendapatan</h3>
+                      <div className="h-72">
+                        <ResponsiveContainer width="100%" height="100%">
+                          <LineChart data={revenueData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+                            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" vertical={false} />
+                            <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{fill: '#9ca3af'}} />
+                            <YAxis axisLine={false} tickLine={false} tick={{fill: '#9ca3af'}} tickFormatter={(value) => `${value/1000}k`} />
+                            <Tooltip 
+                              formatter={(value) => [formatCurrency(value), 'Pendapatan']}
+                              contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                            />
+                            <Line type="monotone" dataKey="revenue" stroke="#4f46e5" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} activeDot={{ r: 6 }} />
+                          </LineChart>
+                        </ResponsiveContainer>
+                      </div>
+                    </div>
+
+                    {/* Expense Categories Chart */}
+                    <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+                      <h3 className="text-lg font-semibold text-gray-800 mb-4">Distribusi Pengeluaran</h3>
+                      {EXPENSE_CATEGORIES.length > 0 ? (
+                        <>
+                          <div className="h-64 flex items-center justify-center">
+                            <ResponsiveContainer width="100%" height="100%">
+                              <PieChart>
+                                <Pie
+                                  data={EXPENSE_CATEGORIES}
+                                  cx="50%"
+                                  cy="50%"
+                                  innerRadius={60}
+                                  outerRadius={80}
+                                  paddingAngle={5}
+                                  dataKey="value"
+                                >
+                                  {EXPENSE_CATEGORIES.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                  ))}
+                                </Pie>
+                                <Tooltip formatter={(value) => formatCurrency(value)} />
+                              </PieChart>
+                            </ResponsiveContainer>
+                          </div>
+                          <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
+                            {EXPENSE_CATEGORIES.map((cat, index) => (
+                              <div key={cat.name} className="flex items-center space-x-2">
+                                <span className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: COLORS[index % COLORS.length] }}></span>
+                                <span className="text-gray-600 truncate" title={cat.name}>{cat.name}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </>
+                      ) : (
+                        <div className="h-64 flex flex-col items-center justify-center text-gray-400">
+                           <PieChartIcon size={48} className="mb-2 opacity-50" />
+                           <p>Belum ada data pengeluaran</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'expenses' && (
+                <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                  <div className="p-6 border-b border-gray-100 flex justify-between items-center">
+                    <h3 className="text-lg font-semibold text-gray-800">Daftar Pengeluaran</h3>
+                  </div>
+                  <div className="overflow-x-auto">
+                    <table className="w-full whitespace-nowrap">
+                      <thead className="bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                        <tr>
+                          <th className="px-6 py-4">Tanggal</th>
+                          <th className="px-6 py-4">Kategori</th>
+                          <th className="px-6 py-4">Deskripsi</th>
+                          <th className="px-6 py-4 text-right">Jumlah</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {expenses.length > 0 ? (
+                            expenses.map((expense) => (
+                            <tr key={expense.id} className="hover:bg-gray-50 transition-colors">
+                                <td className="px-6 py-4 text-sm text-gray-600">{expense.date}</td>
+                                <td className="px-6 py-4">
+                                <span className="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">
+                                    {expense.category}
+                                </span>
+                                </td>
+                                <td className="px-6 py-4 text-sm text-gray-600">{expense.description}</td>
+                                <td className="px-6 py-4 text-sm font-medium text-gray-900 text-right">{formatCurrency(expense.amount)}</td>
+                            </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="4" className="px-6 py-8 text-center text-gray-500">
+                                    Belum ada data pengeluaran dicatat.
+                                </td>
+                            </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+
+               {}
+               {activeTab === 'reports' && (
+                <div className="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 text-center">
+                  <div className="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <FileText className="text-indigo-600" size={32} />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">Laporan Sedang Disiapkan</h3>
+                  <p className="text-gray-500 max-w-md mx-auto mb-6">
+                    Fitur eksport laporan PDF dan Excel (Laba/Rugi, Neraca Kas) akan segera hadir di pembaruan berikutnya. 
+                  </p>
+                  <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg font-medium transition-colors">
+                    Generate Draft Laporan Bulan Ini
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+
+        </main>
+      </div>
+
+      {}
+      {showExpenseModal && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl w-full max-w-md p-6 shadow-xl transform transition-all">
+            <h3 className="text-xl font-bold text-gray-900 mb-4">Catat Pengeluaran Baru</h3>
+            <form onSubmit={handleAddExpense} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal</label>
+                <input 
+                  type="date" 
+                  required
+                  value={newExpense.date}
+                  onChange={(e) => setNewExpense({...newExpense, date: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+                <select 
+                  value={newExpense.category}
+                  onChange={(e) => setNewExpense({...newExpense, category: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none bg-white"
+                >
+                  <option value="Bahan Baku">Bahan Baku</option>
+                  <option value="Operasional">Operasional (Listrik, Air)</option>
+                  <option value="Gaji">Gaji Karyawan</option>
+                  <option value="Sewa Tempat">Sewa Tempat</option>
+                  <option value="Lainnya">Lainnya</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Jumlah (Rp)</label>
+                <input 
+                  type="number" 
+                  required
+                  placeholder="Misal: 150000"
+                  value={newExpense.amount}
+                  onChange={(e) => setNewExpense({...newExpense, amount: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Keterangan Singkat</label>
+                <input 
+                  type="text" 
+                  placeholder="Misal: Beli sayur di pasar"
+                  value={newExpense.description}
+                  onChange={(e) => setNewExpense({...newExpense, description: e.target.value})}
+                  className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow"
+                />
+              </div>
+
+              <div className="flex space-x-3 pt-4">
+                <button 
+                  type="button" 
+                  onClick={() => setShowExpenseModal(false)}
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 font-medium transition-colors disabled:opacity-50"
+                >
+                  Batal
+                </button>
+                <button 
+                  type="submit" 
+                  disabled={isSubmitting}
+                  className="flex-1 px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 font-medium shadow-sm transition-colors disabled:opacity-50 flex justify-center items-center"
+                >
+                  {isSubmitting ? <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> : 'Simpan'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+}
