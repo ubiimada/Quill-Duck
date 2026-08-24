@@ -215,6 +215,10 @@
                     </div>
                 </div>
 
+                <div class="flex justify-end">
+                    <button onclick="window.toggleArchived()" id="btn-toggle-arsip" class="px-4 py-2 bg-theme-bg border border-theme-border rounded-xl text-[9px] font-black uppercase tracking-widest text-theme-muted hover:text-theme-accent transition-all shadow-sm flex items-center"><i class="ph ph-eye-slash mr-2 text-lg"></i> Data Arsip Disembunyikan</button>
+                </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     
                     <!-- Tabel Pemasukan -->
@@ -323,6 +327,7 @@
                                     <th class="px-5 py-3">Jenis Transaksi</th>
                                     <th class="px-5 py-3">Keterangan</th>
                                     <th class="px-5 py-3 text-right">Nominal (Rp)</th>
+                                    <th class="px-5 py-3 text-center w-16">Aksi</th>
                                 </tr>
                             </thead>
                             <tbody id="brankas-table-body" class="divide-y divide-theme-border text-theme-text text-xs bg-theme-bg/30">
@@ -590,6 +595,7 @@
             </div>
             <form id="brankas-form" class="p-6 space-y-5 no-spinners">
                 <input type="hidden" id="brankas-type" value=""> 
+                <input type="hidden" id="brankas-edit-id" value="">
                 
                 <div class="bg-theme-bg p-4 rounded-xl border border-theme-border flex items-center space-x-3 shadow-inner">
                     <div id="brankas-info-icon" class="w-10 h-10 rounded-full flex items-center justify-center text-xl shrink-0"></div>
@@ -613,7 +619,7 @@
                 </div>
                 <div class="flex space-x-3 pt-4 border-t border-theme-border">
                     <button type="button" onclick="window.closeModal('brankas-modal')" class="flex-1 px-4 py-4 bg-theme-bg border border-theme-border text-theme-text rounded-xl hover:bg-theme-card transition-all text-[10px] font-black uppercase tracking-widest shadow-sm">Batal</button>
-                    <button type="submit" id="btn-submit-brankas" class="flex-1 px-4 py-4 text-white text-[10px] font-black uppercase tracking-widest rounded-xl transition-all shadow-md">Proses</button>
+                    <button type="submit" id="btn-submit-brankas" class="flex-1 px-4 py-4 bg-theme-accent text-white md:text-theme-bg text-[10px] font-black uppercase tracking-widest rounded-xl hover:bg-theme-hover transition-all shadow-md">Proses</button>
                 </div>
             </form>
         </div>
@@ -677,6 +683,7 @@
         let bulkItems = [{name: '', price: ''}];
         let currentKasTotal = 0;
         let currentAnalisisData = null; // Menyimpan state untuk arsip
+        window.showArchived = false;
 
         const getPosCol = (colName) => collection(db, 'artifacts', posAppId, 'public', 'data', colName);
         const getPosDoc = (colName, docId) => doc(db, 'artifacts', posAppId, 'public', 'data', colName, docId);
@@ -941,10 +948,21 @@
             } catch(err) { showToast(err.message, 'error'); }
         };
 
+        window.toggleArchived = () => {
+            window.showArchived = !window.showArchived;
+            document.getElementById('btn-toggle-arsip').innerHTML = window.showArchived 
+                ? '<i class="ph ph-eye mr-2 text-lg"></i> Data Arsip Ditampilkan' 
+                : '<i class="ph ph-eye-slash mr-2 text-lg"></i> Data Arsip Disembunyikan';
+            window.filterMutasiTables();
+        };
+
         window.filterMutasiTables = () => {
             const incFilter = document.getElementById('filter-inc-cat').value; const expFilter = document.getElementById('filter-exp-cat').value;
+            
+            const isVisible = (m) => window.showArchived || !m.isArchived;
+
             // Pemasukan
-            const incMuts = mutations.filter(m => m.type === 'income' && (incFilter === 'All' || m.category === incFilter));
+            const incMuts = mutations.filter(m => m.type === 'income' && isVisible(m) && (incFilter === 'All' || m.category === incFilter));
             let incHtml = incMuts.length ? '' : `<tr><td colspan="4" class="px-4 py-12 text-center text-theme-muted font-bold text-[9px] uppercase tracking-widest border-b border-theme-border border-dashed">Belum ada pemasukan kas.</td></tr>`;
             incMuts.forEach(m => {
                 const badge = `<span class="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${getCatColorClass(m.category)}">${m.category}</span>`;
@@ -962,7 +980,7 @@
             }); document.getElementById('income-table-body').innerHTML = incHtml;
 
             // Pengeluaran
-            const expMuts = mutations.filter(m => m.type === 'expense' && (expFilter === 'All' || m.category === expFilter));
+            const expMuts = mutations.filter(m => m.type === 'expense' && isVisible(m) && (expFilter === 'All' || m.category === expFilter));
             let expHtml = expMuts.length ? '' : `<tr><td colspan="4" class="px-4 py-12 text-center text-theme-muted font-bold text-[9px] uppercase tracking-widest border-b border-theme-border border-dashed">Belum ada pengeluaran kas.</td></tr>`;
             expMuts.forEach(m => {
                 const badge = `<span class="px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-widest border ${getCatColorClass(m.category)}">${m.category}</span>`;
@@ -1177,19 +1195,24 @@
                         <td class="px-5 py-3 font-black uppercase tracking-widest text-[9px] ${colorStr} flex items-center"><i class="ph ${iconStr} mr-2 text-sm"></i>${typeStr}</td>
                         <td class="px-5 py-3 font-bold text-theme-text text-[10px] uppercase tracking-wider">${b.description}</td>
                         <td class="px-5 py-3 text-right font-black tracking-tight ${colorStr}">${formatRp(b.amount)}</td>
+                        <td class="px-5 py-3 text-center"><button onclick="window.editBrankas('${b.id}')" class="text-blue-500 hover:text-white hover:bg-blue-500 w-6 h-6 rounded-md transition-colors border border-blue-500/30 shadow-sm"><i class="ph ph-pencil-simple text-xs"></i></button></td>
                     </tr>
                 `;
             });
             
-            if(brankasData.length === 0) tbody.innerHTML = `<tr><td colspan="4" class="px-5 py-12 text-center text-theme-muted font-bold text-[9px] uppercase tracking-widest border-b border-theme-border border-dashed"><i class="ph ph-vault text-4xl block mb-2 opacity-30"></i>Brankas masih kosong.</td></tr>`;
+            if(brankasData.length === 0) tbody.innerHTML = `<tr><td colspan="5" class="px-5 py-12 text-center text-theme-muted font-bold text-[9px] uppercase tracking-widest border-b border-theme-border border-dashed"><i class="ph ph-vault text-4xl block mb-2 opacity-30"></i>Brankas masih kosong.</td></tr>`;
             
             document.getElementById('total-brankas-display').innerText = formatRp(currentBrankasTotal);
         };
 
-        window.openBrankasModal = (type) => {
+        window.openBrankasModal = (type, isEdit = false) => {
             document.getElementById('brankas-modal').classList.remove('hidden'); document.getElementById('brankas-modal').classList.add('flex');
-            document.getElementById('brankas-form').reset();
-            document.getElementById('brankas-date').value = new Date().toISOString().split('T')[0];
+            
+            if(!isEdit) {
+                document.getElementById('brankas-form').reset();
+                document.getElementById('brankas-date').value = new Date().toISOString().split('T')[0];
+                document.getElementById('brankas-edit-id').value = '';
+            }
             document.getElementById('brankas-type').value = type;
 
             const title = document.getElementById('brankas-modal-title-text');
@@ -1218,6 +1241,17 @@
             }
         };
 
+        window.editBrankas = (id) => {
+            const b = brankasData.find(x => x.id === id);
+            if(!b) return;
+            window.openBrankasModal(b.type, true);
+            document.getElementById('brankas-edit-id').value = b.id;
+            document.getElementById('brankas-date').value = b.date;
+            document.getElementById('brankas-amount').value = b.amount;
+            document.getElementById('brankas-desc').value = b.description;
+            document.getElementById('brankas-modal-title-text').innerText = "Edit Transaksi Brankas";
+        };
+
         document.getElementById('brankas-form').addEventListener('submit', async (e) => {
             e.preventDefault(); if(!isAuthReady) return;
             const btn = document.getElementById('btn-submit-brankas'); const origText = btn.innerHTML; btn.innerText = "Proses..."; btn.disabled = true;
@@ -1227,22 +1261,32 @@
                 const amount = Number(document.getElementById('brankas-amount').value);
                 const date = document.getElementById('brankas-date').value;
                 const desc = document.getElementById('brankas-desc').value;
+                const editId = document.getElementById('brankas-edit-id').value;
 
-                if (type === 'in_kas' && amount > currentKasTotal) throw new Error("Saldo Kas Usaha tidak mencukupi!");
-                if (type === 'out_kas' && amount > currentBrankasTotal) throw new Error("Saldo Brankas tidak mencukupi!");
+                if (type === 'in_kas' && !editId && amount > currentKasTotal) throw new Error("Saldo Kas Usaha tidak mencukupi!");
+                if (type === 'out_kas' && !editId && amount > currentBrankasTotal) throw new Error("Saldo Brankas tidak mencukupi!");
 
-                // 1. Simpan ke history Brankas
-                const brankasPayload = { type, amount, date, description: desc, createdAt: new Date().toISOString() };
-                const docRef = await addDoc(getPosCol("finance_brankas"), brankasPayload);
+                const brankasPayload = { type, amount, date, description: desc };
 
-                // 2. Jika berhubungan dengan Kas, buat record mutasi kas terikat (isBrankas = true)
-                if (type === 'in_kas') {
-                    await addDoc(getPosCol("finance_mutations"), { type: 'expense', date, category: 'Pindah ke Brankas', amount, description: `ID: ${docRef.id} - ${desc}`, createdAt: new Date().toISOString(), isDeleted: false, isBrankas: true, brankasRef: docRef.id });
-                } else if (type === 'out_kas') {
-                    await addDoc(getPosCol("finance_mutations"), { type: 'income', date, category: 'Cairkan dari Brankas', amount, description: `ID: ${docRef.id} - ${desc}`, createdAt: new Date().toISOString(), isDeleted: false, isBrankas: true, brankasRef: docRef.id });
+                if(editId) {
+                    await updateDoc(getPosDoc("finance_brankas", editId), brankasPayload);
+                    const linkedMut = mutations.find(m => m.isBrankas && m.brankasRef === editId);
+                    if(linkedMut) {
+                        await updateDoc(getPosDoc("finance_mutations", linkedMut.id), { amount, date, description: `ID: ${editId} - ${desc}` });
+                    }
+                    showToast("Transaksi Brankas Diperbarui!", "success");
+                } else {
+                    brankasPayload.createdAt = new Date().toISOString();
+                    const docRef = await addDoc(getPosCol("finance_brankas"), brankasPayload);
+
+                    if (type === 'in_kas') {
+                        await addDoc(getPosCol("finance_mutations"), { type: 'expense', date, category: 'Pindah ke Brankas', amount, description: `ID: ${docRef.id} - ${desc}`, createdAt: new Date().toISOString(), isDeleted: false, isBrankas: true, brankasRef: docRef.id });
+                    } else if (type === 'out_kas') {
+                        await addDoc(getPosCol("finance_mutations"), { type: 'income', date, category: 'Cairkan dari Brankas', amount, description: `ID: ${docRef.id} - ${desc}`, createdAt: new Date().toISOString(), isDeleted: false, isBrankas: true, brankasRef: docRef.id });
+                    }
+                    showToast("Transaksi Brankas Berhasil!", "success");
                 }
 
-                showToast("Transaksi Brankas Berhasil!", "success");
                 window.closeModal('brankas-modal');
             } catch(err) { showToast(err.message, 'error'); } finally { btn.innerHTML = origText; btn.disabled = false; }
         });
@@ -1352,12 +1396,18 @@
             const btn = document.getElementById('btn-submit-arsip'); const origText = btn.innerHTML; btn.innerText = "Menyimpan..."; btn.disabled = true;
             try {
                 const name = document.getElementById('arsip-name').value;
-                await addDoc(getColRef("finance_archives"), { 
+                await addDoc(getPosCol("finance_archives"), { 
                     name, 
                     start: currentAnalisisData.start, end: currentAnalisisData.end, 
                     totalInc: currentAnalisisData.totalInc, totalExp: currentAnalisisData.totalExp, profit: currentAnalisisData.profit, 
                     timestamp: Date.now() 
                 });
+                
+                // Set isArchived = true on existing mutations in this period
+                const mutsToArchive = mutations.filter(m => !m.isDeleted && !m.isArchived && m.date >= currentAnalisisData.start && m.date <= currentAnalisisData.end);
+                const updatePromises = mutsToArchive.map(m => updateDoc(getPosDoc("finance_mutations", m.id), { isArchived: true }));
+                await Promise.all(updatePromises);
+                
                 showToast("Arsip Laporan Disimpan!", "success");
                 window.closeModal('arsip-modal');
             } catch(err) { showToast(err.message, 'error'); } finally { btn.innerHTML = origText; btn.disabled = false; }
