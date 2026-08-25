@@ -15,14 +15,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         
         :root {
-            /* Tema Gelap (Dark Pawon) - Default */
-            --bg-color: #0c0c0c;
-            --card-color: #181818;
-            --text-main: #fdf6e3;
+            /* Tema Gelap (Dark Pawon) - Default (Sudah Direvisi Kontrasnya) */
+            --bg-color: #121212; /* Sedikit lebih terang dari hitam legam */
+            --card-color: #1e1e1e; /* Kontras lebih baik dengan bg */
+            --text-main: #ffffff; /* Putih terang untuk keterbacaan */
             --text-muted: #a1a1aa;
             --accent-color: #d4af37;
             --accent-hover: #f2ca51;
-            --border-color: #27272a;
+            --border-color: #3f3f46; /* Garis lebih terlihat */
         }
 
         .theme-soft {
@@ -79,7 +79,7 @@
     <!-- Loading Screen -->
     <div id="loading-screen" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-theme-bg transition-opacity duration-500">
         <div class="w-24 h-24 mb-4 rounded-full bg-theme-bg border-2 border-theme-accent flex items-center justify-center shadow-lg relative overflow-hidden animate-pulse">
-            <!-- SVG Logo Quill-Duck (Hitam/Emas) -->
+            <!-- SVG Logo Quill-Duck -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-14 h-14 text-theme-accent fill-current absolute z-10">
                 <path d="M216,112.51V40a8,8,0,0,0-8-8H160a8,8,0,0,0-7.8,6.24L133.4,121.6A48.07,48.07,0,0,0,104,112H80a48.05,48.05,0,0,0-48,48v48a8,8,0,0,0,8,8H104a48.05,48.05,0,0,0,48-48V163l60.2,13.38A8,8,0,0,0,224,168.6V120A8,8,0,0,0,216,112.51ZM104,200H48V160a32,32,0,0,1,32-32h24a32,32,0,0,1,32,32v8A32,32,0,0,1,104,200Z"/>
                 <circle cx="84" cy="156" r="12"/><path d="M192,48h16V98.24L160,86ZM147.28,103,163.6,155.6l-24-5.33V140A8,8,0,0,1,147.28,103Z"/>
@@ -96,7 +96,7 @@
 
     <!-- Sidebar Navigation (Desktop) -->
     <nav class="w-full md:w-20 lg:w-64 bg-theme-card border-r border-theme-border flex-col justify-between hidden md:flex shrink-0 z-20">
-        <div>
+        <div class="flex-1 overflow-y-auto no-scrollbar">
             <div class="p-6 flex flex-col items-center justify-center border-b border-theme-border">
                 <div class="w-14 h-14 rounded-full bg-theme-bg border border-theme-accent flex items-center justify-center shadow-md mb-3">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" class="w-8 h-8 text-theme-accent fill-current">
@@ -107,7 +107,9 @@
                 <h1 class="font-serif font-black text-theme-accent text-lg tracking-wide hidden lg:block leading-tight text-center">QUILL-DUCK<br><span class="text-[10px] text-theme-text font-sans uppercase">Pawon Nusantara</span></h1>
                 <p class="text-[8px] text-theme-muted uppercase tracking-widest font-bold hidden lg:block mt-1">Finance System</p>
             </div>
+            
             <div class="p-4 space-y-2">
+                <!-- Tab Utama -->
                 <button onclick="window.switchTab('dashboard')" id="btn-tab-dashboard" class="w-full flex items-center justify-center lg:justify-start space-x-3 px-4 py-3 rounded-xl transition-all text-theme-muted hover:bg-theme-bg/50">
                     <i class="ph ph-chart-pie-slice text-xl"></i><span class="hidden lg:block text-xs font-bold uppercase tracking-wider">Dashboard</span>
                 </button>
@@ -120,17 +122,22 @@
                 <button onclick="window.switchTab('arsip')" id="btn-tab-arsip" class="w-full flex items-center justify-center lg:justify-start space-x-3 px-4 py-3 rounded-xl transition-all text-theme-muted hover:bg-theme-bg/50">
                     <i class="ph ph-files text-xl"></i><span class="hidden lg:block text-xs font-bold uppercase tracking-wider">Tutup Buku</span>
                 </button>
+                
+                <!-- Pemisah -->
+                <div class="py-2"><hr class="border-theme-border"></div>
+
+                <!-- Tab Pendukung -->
                 <button onclick="window.switchTab('kategori')" id="btn-tab-kategori" class="w-full flex items-center justify-center lg:justify-start space-x-3 px-4 py-3 rounded-xl transition-all text-theme-muted hover:bg-theme-bg/50">
-                    <i class="ph ph-folder-gear text-xl"></i><span class="hidden lg:block text-xs font-bold uppercase tracking-wider">Pengaturan</span>
+                    <i class="ph ph-gear text-xl"></i><span class="hidden lg:block text-xs font-bold uppercase tracking-wider">Pengaturan</span>
                 </button>
                 <button onclick="window.switchTab('sampah')" id="btn-tab-sampah" class="w-full flex items-center justify-center lg:justify-start space-x-3 px-4 py-3 rounded-xl transition-all text-theme-muted hover:bg-theme-bg/50">
                     <i class="ph ph-trash text-xl"></i><span class="hidden lg:block text-xs font-bold uppercase tracking-wider">Sampah</span>
                 </button>
             </div>
         </div>
-        <div class="p-4 border-t border-theme-border">
+        <div class="p-4 border-t border-theme-border shrink-0">
             <button onclick="window.toggleTheme()" class="w-full flex items-center justify-center lg:justify-start space-x-3 px-4 py-3 rounded-xl bg-theme-bg text-theme-text border border-theme-border hover:border-theme-accent transition-colors shadow-sm">
-                <i class="ph ph-palette text-lg text-theme-accent"></i><span class="hidden lg:block text-[10px] font-black uppercase tracking-widest">Ganti Tema</span>
+                <i class="ph ph-palette text-lg text-theme-accent"></i><span id="theme-text-desktop" class="hidden lg:block text-[10px] font-black uppercase tracking-widest">Ubah ke Soft Mode</span>
             </button>
         </div>
     </nav>
@@ -169,16 +176,20 @@
         <!-- Mobile Navigation Overlay -->
         <div id="mobile-menu" class="fixed inset-0 bg-slate-900/95 backdrop-blur-sm z-50 hidden flex-col">
             <div class="flex justify-end p-4">
-                <button onclick="window.toggleMobileMenu()" class="w-10 h-10 bg-theme-card text-theme-text rounded-full flex items-center justify-center border border-theme-border"><i class="ph ph-x text-xl"></i></button>
+                <button onclick="window.toggleMobileMenu()" class="w-10 h-10 bg-theme-card text-white rounded-full flex items-center justify-center border border-theme-border"><i class="ph ph-x text-xl"></i></button>
             </div>
-            <div class="flex-1 flex flex-col items-center justify-center space-y-4 p-8">
-                <button onclick="window.switchTab('dashboard'); window.toggleMobileMenu()" class="text-xl font-black text-theme-text uppercase tracking-widest flex items-center space-x-3"><i class="ph ph-chart-pie-slice text-theme-accent"></i><span>Dashboard</span></button>
-                <button onclick="window.switchTab('mutasi'); window.toggleMobileMenu()" class="text-xl font-black text-theme-text uppercase tracking-widest flex items-center space-x-3"><i class="ph ph-swap text-theme-accent"></i><span>Mutasi Kas</span></button>
-                <button onclick="window.switchTab('brankas'); window.toggleMobileMenu()" class="text-xl font-black text-theme-text uppercase tracking-widest flex items-center space-x-3"><i class="ph ph-vault text-theme-accent"></i><span>Brankas</span></button>
-                <button onclick="window.switchTab('arsip'); window.toggleMobileMenu()" class="text-xl font-black text-theme-text uppercase tracking-widest flex items-center space-x-3"><i class="ph ph-files text-theme-accent"></i><span>Tutup Buku</span></button>
-                <button onclick="window.switchTab('kategori'); window.toggleMobileMenu()" class="text-xl font-black text-theme-text uppercase tracking-widest flex items-center space-x-3"><i class="ph ph-folder-gear text-theme-accent"></i><span>Pengaturan</span></button>
-                <button onclick="window.switchTab('sampah'); window.toggleMobileMenu()" class="text-xl font-black text-theme-text uppercase tracking-widest flex items-center space-x-3"><i class="ph ph-trash text-theme-accent"></i><span>Sampah</span></button>
-                <button onclick="window.toggleTheme(); window.toggleMobileMenu()" class="mt-8 px-6 py-3 border border-theme-accent text-slate-900 rounded-xl text-xs font-black uppercase tracking-widest">Ganti Tema</button>
+            <div class="flex-1 flex flex-col items-center justify-center space-y-4 p-8 overflow-y-auto">
+                <button onclick="window.switchTab('dashboard'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-chart-pie-slice text-theme-accent"></i><span>Dashboard</span></button>
+                <button onclick="window.switchTab('mutasi'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-swap text-theme-accent"></i><span>Mutasi Kas</span></button>
+                <button onclick="window.switchTab('brankas'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-vault text-theme-accent"></i><span>Brankas</span></button>
+                <button onclick="window.switchTab('arsip'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-files text-theme-accent"></i><span>Tutup Buku</span></button>
+                
+                <div class="w-full max-w-xs h-px bg-white/20 my-2"></div>
+                
+                <button onclick="window.switchTab('kategori'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-gear text-theme-accent"></i><span>Pengaturan</span></button>
+                <button onclick="window.switchTab('sampah'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-trash text-theme-accent"></i><span>Sampah</span></button>
+                
+                <button onclick="window.toggleTheme(); window.toggleMobileMenu()" id="theme-text-mobile" class="mt-8 px-6 py-3 border border-theme-accent bg-theme-accent text-slate-900 rounded-xl text-xs font-black uppercase tracking-widest shadow-md">Ubah ke Soft Mode</button>
             </div>
         </div>
 
@@ -218,7 +229,7 @@
                         <h3 id="dash-net" class="text-xl sm:text-2xl font-black text-theme-accent relative z-10 drop-shadow-sm truncate">Rp 0</h3>
                     </div>
                     <!-- Info Brankas Panel in Dashboard -->
-                    <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden bg-slate-800/10 border-slate-500/30 group">
+                    <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden bg-slate-800/20 border-slate-500/30 group">
                         <div class="absolute -right-4 -bottom-4 text-slate-500/10 text-7xl group-hover:scale-110 transition-transform"><i class="ph ph-vault"></i></div>
                         <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest relative z-10">Total Saldo Brankas</p>
                         <h3 id="dash-brankas" class="text-xl sm:text-2xl font-black text-slate-400 relative z-10 drop-shadow-sm truncate">Rp 0</h3>
@@ -243,19 +254,24 @@
                                     <p class="text-[10px] font-bold text-theme-muted uppercase tracking-widest">Belum ada pengeluaran</p>
                                 </div>
                             </div>
-                            <!-- Top 3 Pengeluaran -->
-                            <div class="w-full mt-4 h-24 shrink-0 overflow-y-auto no-scrollbar">
-                                <h4 class="text-[10px] font-bold text-theme-muted uppercase tracking-widest mb-2 border-b border-theme-border pb-1">Top 3 Pengeluaran Terbesar</h4>
-                                <ul id="top-expenses-list" class="space-y-1.5"></ul>
-                            </div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- New Feature: Kotak Rincian Kategori Pengeluaran -->
+                <div class="glass-card p-4 sm:p-6 mt-4 sm:mt-6">
+                    <h3 class="text-xs font-black text-theme-text mb-4 uppercase tracking-widest border-b border-theme-border pb-3 flex items-center shrink-0">
+                        <i class="ph ph-list-numbers text-rose-500 mr-2 text-lg"></i> Rincian Pengeluaran per Kategori
+                    </h3>
+                    <div id="dash-category-details" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <!-- Konten Rincian Kategori Akan di-Generate Lewat Javascript -->
                     </div>
                 </div>
             </div>
 
             <!-- TAB: MUTASI KAS -->
             <div id="tab-mutasi" class="tab-content max-w-7xl mx-auto space-y-6">
-                <!-- Banner Saldo Operasional (Diperkecil) -->
+                <!-- Banner Saldo Operasional -->
                 <div class="glass-card p-4 sm:p-5 flex items-center justify-between bg-gradient-to-r from-theme-card to-theme-bg relative overflow-hidden shadow-md border border-theme-accent/20">
                     <div class="z-10">
                         <div class="flex items-center space-x-2 mb-1">
@@ -270,7 +286,7 @@
                 <!-- Notifikasi Revisi POS Container -->
                 <div id="pos-revisions-container" class="space-y-3 mb-4"></div>
 
-                <!-- Konfirmasi Setoran Kasir (Data Pending dari POS) -->
+                <!-- Konfirmasi Setoran Kasir -->
                 <div class="glass-card overflow-hidden shadow-sm mb-4">
                     <div class="p-4 border-b border-theme-border bg-theme-bg/80 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                         <div class="flex items-center space-x-3">
@@ -439,7 +455,7 @@
                         </div>
 
                         <div class="pt-6 border-t border-theme-border text-center">
-                            <button onclick="window.openArsipModal()" class="px-8 py-4 bg-slate-900 text-theme-accent border border-theme-accent rounded-xl text-xs font-black uppercase tracking-widest shadow-xl hover:bg-theme-accent hover:text-slate-900 transition-all flex items-center justify-center mx-auto space-x-2"><i class="ph ph-archive-box text-lg"></i><span>Simpan Arsip Laporan Ini</span></button>
+                            <button onclick="window.openArsipModal()" class="px-8 py-4 bg-theme-card text-theme-accent border border-theme-accent rounded-xl text-xs font-black uppercase tracking-widest shadow-xl hover:bg-theme-accent hover:text-slate-900 transition-all flex items-center justify-center mx-auto space-x-2"><i class="ph ph-archive-box text-lg"></i><span>Simpan Arsip Laporan Ini</span></button>
                         </div>
                     </div>
                 </div>
@@ -457,7 +473,7 @@
             <!-- TAB: KATEGORI / PENGATURAN -->
             <div id="tab-kategori" class="tab-content max-w-4xl mx-auto space-y-6 hidden">
                 <div class="glass-card p-5 sm:p-6 shadow-sm">
-                    <h2 class="text-sm font-black text-theme-text uppercase tracking-widest border-b border-theme-border pb-4 mb-4 flex items-center"><i class="ph ph-folder-gear text-theme-accent mr-2 text-xl"></i> Manajemen Kategori</h2>
+                    <h2 class="text-sm font-black text-theme-text uppercase tracking-widest border-b border-theme-border pb-4 mb-4 flex items-center"><i class="ph ph-gear text-theme-accent mr-2 text-xl"></i> Pengaturan & Kategori</h2>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                         <div>
@@ -827,6 +843,12 @@
             if(!str) return 0;
             return parseFloat(str.toString().replace(/\./g, '')) || 0;
         };
+        
+        window.formatCurrencyInput = (el) => {
+            let val = el.value.replace(/[^0-9]/g, '');
+            if(val) el.value = parseInt(val).toLocaleString('id-ID');
+            else el.value = '';
+        };
 
         const getTodayYMD = () => { const d = new Date(); d.setMinutes(d.getMinutes() - d.getTimezoneOffset()); return d.toISOString().split('T')[0]; };
         
@@ -850,8 +872,15 @@
         
         window.toggleTheme = () => {
             currentTheme = currentTheme === 'dark' ? 'soft' : 'dark';
+            const themeName = currentTheme === 'dark' ? 'Ubah ke Soft Mode' : 'Ubah ke Night Mode';
+            
             if (currentTheme === 'soft') document.body.classList.add('theme-soft');
             else document.body.classList.remove('theme-soft');
+            
+            // Update Text Button
+            document.getElementById('theme-text-desktop').innerText = themeName;
+            document.getElementById('theme-text-mobile').innerText = themeName;
+            
             // Redraw charts to update colors
             if(!document.getElementById('tab-dashboard').classList.contains('hidden')) applyDashboardFilter();
             if(!document.getElementById('tb-result-container').classList.contains('hidden')) generateTutupBuku();
@@ -1703,7 +1732,6 @@
 
             const labels = []; const incomeData = []; const expenseData = []; 
             let totIn = 0, totOut = 0; let catOut = {};
-            let expenseItems = []; // For top 3
 
             dates.forEach(dStr => {
                 const parts = dStr.split('-'); labels.push(parts[2] + '/' + parts[1]);
@@ -1714,7 +1742,6 @@
                     else { 
                         dayOut += amount; totOut += amount; 
                         catOut[m.category] = (catOut[m.category] || 0) + amount; 
-                        expenseItems.push({ desc: m.description || m.category, amount: amount, cat: m.category });
                     }
                 });
                 incomeData.push(dayIn); expenseData.push(dayOut);
@@ -1728,16 +1755,26 @@
             const textColor = currentTheme === 'soft' ? '#374151' : '#9ca3af';
             const gridColor = currentTheme === 'soft' ? '#e5e7eb' : '#333333';
 
-            // Top Expenses List
-            const topList = document.getElementById('top-expenses-list');
-            topList.innerHTML = '';
-            expenseItems.sort((a,b) => b.amount - a.amount).slice(0, 3).forEach(ex => {
-                topList.innerHTML += `<li class="flex justify-between items-center bg-theme-bg p-2 rounded-lg border border-theme-border text-[10px] shadow-sm">
-                    <span class="truncate text-theme-text font-bold max-w-[60%]">${ex.desc}</span>
-                    <span class="text-rose-500 font-black whitespace-nowrap">${formatRp(ex.amount)}</span>
-                </li>`;
-            });
-            if(expenseItems.length === 0) topList.innerHTML = `<li class="text-[10px] text-theme-muted italic">Tidak ada.</li>`;
+            // Generate Kotak Rincian Kategori Pengeluaran
+            const catDetails = document.getElementById('dash-category-details');
+            catDetails.innerHTML = '';
+            if(Object.keys(catOut).length > 0) {
+                // Sort by highest amount
+                const sortedCats = Object.keys(catOut).sort((a,b) => catOut[b] - catOut[a]);
+                sortedCats.forEach(cat => {
+                    catDetails.innerHTML += `
+                        <div class="flex justify-between items-center bg-theme-bg p-3 rounded-xl border border-theme-border shadow-sm">
+                            <span class="text-[10px] font-bold text-theme-text uppercase tracking-widest flex items-center">
+                                <span class="w-3 h-3 rounded-full mr-2 shadow-sm" style="background-color: ${getCatColor(cat)}"></span>
+                                ${cat}
+                            </span>
+                            <span class="text-xs font-black text-rose-500 tracking-tight">${formatRp(catOut[cat])}</span>
+                        </div>
+                    `;
+                });
+            } else {
+                catDetails.innerHTML = `<div class="col-span-full text-[10px] text-theme-muted font-bold text-center py-6 bg-theme-bg rounded-xl border border-theme-border border-dashed">Belum ada data pengeluaran untuk periode ini.</div>`;
+            }
 
 
             if(dashChartInc) dashChartInc.destroy();
