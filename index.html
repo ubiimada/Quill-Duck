@@ -913,9 +913,23 @@
                 
                 // 1. Categories
                 onSnapshot(getPosCol('finance_categories'), (snap) => {
-                    categories = []; let sysNames = ['Setoran', 'Pindah ke Brankas', 'Cairkan dari Brankas'];
+                    categories = []; 
+                    let sysNames = ['Setoran', 'Pindah ke Brankas', 'Cairkan dari Brankas'];
+                    
+                    const sysColors = {
+                        'Setoran': '#10b981', 
+                        'Pindah ke Brankas': '#f59e0b', 
+                        'Cairkan dari Brankas': '#3b82f6' 
+                    };
+
                     snap.forEach(d => { const data = d.data(); if(!sysNames.includes(data.name)) categories.push({ id: d.id, ...data }); });
-                    sysNames.forEach(name => categories.push({ id: 'sys_'+name, name: name, type: name==='Setoran'||name==='Cairkan dari Brankas'?'income':'expense', color: '#64748b', isSystem: true }));
+                    sysNames.forEach(name => categories.push({ 
+                        id: 'sys_'+name, 
+                        name: name, 
+                        type: name==='Setoran'||name==='Cairkan dari Brankas'?'income':'expense', 
+                        color: sysColors[name] || '#64748b', 
+                        isSystem: true 
+                    }));
                     renderCategories(); updateCategoryDropdowns();
                 });
 
@@ -977,7 +991,7 @@
                     snap.forEach(d => { rawTransactions.push({ id: d.id, ...d.data() }); });
                 });
 
-                // Failsafe to remove loading screen after 3 seconds in case of empty collections or delays
+                // Failsafe timeout
                 setTimeout(() => {
                     if(document.getElementById('loading-screen')) {
                         document.getElementById('loading-screen').classList.add('opacity-0');
@@ -987,14 +1001,7 @@
                     }
                 }, 3000);
 
-            } catch(e) { 
-                console.error("Login Failed:", e); 
-                showToast("Koneksi Error", "error"); 
-                // Hide loading even on error so user isn't stuck
-                if(document.getElementById('loading-screen')) {
-                    document.getElementById('loading-screen').classList.add('opacity-0', 'pointer-events-none');
-                }
-            }
+            } catch(e) { console.error("Login Failed:", e); showToast("Koneksi Error", "error"); }
         }
 
         const calculateTotalKas = () => {
@@ -1761,11 +1768,7 @@
             ls.classList.add('opacity-0'); setTimeout(() => ls.classList.add('pointer-events-none'), 500);
         };
 
-        window.onload = () => { 
-            initAuth(); 
-            window.switchTab('dashboard'); 
-            window.setupAutoFormatListeners(); // Initialize formatters globally just in case
-        };
+        window.onload = () => { initAuth(); window.switchTab('dashboard'); };
     </script>
 </body>
 </html>
