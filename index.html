@@ -205,67 +205,8 @@
                     <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden group">
                         <div class="absolute -right-4 -bottom-4 text-emerald-500/10 text-7xl group-hover:scale-110 transition-transform"><i class="ph ph-trend-up"></i></div>
                         <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest relative z-10">Total Pemasukan</p>
-                        <h3 id="dash-tot-in" class="text-xl sm:text-2xl lg:text-3xl font-black text-emerald-500 relative z-10 drop-shadow-sm truncate">Rp 0</h3>
+                        <h3 id="dash-tot-in" class="text-xl sm:text-2xl font-black text-emerald-500 relative z-10 drop-shadow-sm">Rp 0</h3>
                     </div>
-                    <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden group">
-                        <div class="absolute -right-4 -bottom-4 text-rose-500/10 text-7xl group-hover:scale-110 transition-transform"><i class="ph ph-trend-down"></i></div>
-                        <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest relative z-10">Total Pengeluaran</p>
-                        <h3 id="dash-tot-out" class="text-xl sm:text-2xl lg:text-3xl font-black text-rose-500 relative z-10 drop-shadow-sm truncate">Rp 0</h3>
-                    </div>
-                    <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden bg-theme-accent/5 border-theme-accent/30 group">
-                        <div class="absolute -right-4 -bottom-4 text-theme-accent/10 text-7xl group-hover:scale-110 transition-transform"><i class="ph ph-scales"></i></div>
-                        <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest relative z-10">Laba Bersih Operasional</p>
-                        <h3 id="dash-net" class="text-xl sm:text-2xl lg:text-3xl font-black text-theme-accent relative z-10 drop-shadow-sm truncate">Rp 0</h3>
-                    </div>
-                    <!-- New Info Brankas Panel in Dashboard -->
-                    <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden bg-slate-800/10 border-slate-500/30 group">
-                        <div class="absolute -right-4 -bottom-4 text-slate-500/10 text-7xl group-hover:scale-110 transition-transform"><i class="ph ph-vault"></i></div>
-                        <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest relative z-10">Total Saldo Brankas</p>
-                        <h3 id="dash-brankas" class="text-xl sm:text-2xl lg:text-3xl font-black text-slate-400 relative z-10 drop-shadow-sm truncate">Rp 0</h3>
-                    </div>
-                </div>
-
-                <!-- Dashboard Charts -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-                    <div class="glass-card p-4 sm:p-6 flex flex-col min-h-[350px] lg:h-[420px]">
-                        <h3 class="text-xs font-black text-theme-text mb-4 uppercase tracking-widest border-b border-theme-border pb-3 flex items-center shrink-0"><i class="ph ph-chart-line-up text-emerald-500 mr-2 text-lg"></i> Tren Pemasukan</h3>
-                        <div class="flex-1 relative w-full min-h-0"><canvas id="chart-income"></canvas></div>
-                    </div>
-                    <div class="glass-card p-4 sm:p-6 flex flex-col min-h-[400px] lg:h-[420px]">
-                        <h3 class="text-xs font-black text-theme-text mb-4 uppercase tracking-widest border-b border-theme-border pb-3 flex items-center justify-between shrink-0">
-                            <span class="flex items-center"><i class="ph ph-pie-chart text-rose-500 mr-2 text-lg"></i> Porsi Pengeluaran</span>
-                        </h3>
-                        <div class="flex-1 relative w-full flex flex-col min-h-0">
-                            <div class="w-full h-48 sm:h-56 relative flex items-center justify-center shrink-0">
-                                <canvas id="chart-expense"></canvas>
-                                <div id="empty-expense-chart" class="absolute inset-0 flex flex-col items-center justify-center bg-theme-card/80 backdrop-blur-sm z-10 hidden">
-                                    <i class="ph ph-receipt text-3xl text-theme-muted opacity-50 mb-2"></i>
-                                    <p class="text-[10px] font-bold text-theme-muted uppercase tracking-widest">Belum ada pengeluaran</p>
-                                </div>
-                            </div>
-                            <!-- Top 3 Pengeluaran -->
-                            <div class="w-full mt-4 flex-1 overflow-y-auto no-scrollbar">
-                                <h4 class="text-[10px] font-bold text-theme-muted uppercase tracking-widest mb-2 border-b border-theme-border pb-1">Top 3 Pengeluaran Terbesar</h4>
-                                <ul id="top-expenses-list" class="space-y-1.5"></ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB: MUTASI KAS -->
-            <div id="tab-mutasi" class="tab-content max-w-7xl mx-auto space-y-6">
-                <!-- Banner Saldo Operasional -->
-                <div class="glass-card p-6 sm:p-8 flex items-center justify-between bg-gradient-to-r from-theme-card to-theme-bg relative overflow-hidden shadow-lg border border-theme-accent/20">
-                    <div class="z-10 w-full">
-                        <div class="flex items-center space-x-2 mb-2">
-                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shrink-0"></span>
-                            <p class="text-[10px] font-black text-theme-muted tracking-widest uppercase truncate">Saldo Kas Operasional (Berputar)</p>
-                        </div>
-                        <h2 id="total-kas-display" class="text-4xl sm:text-5xl lg:text-6xl font-black text-theme-accent font-serif tracking-tighter drop-shadow-md truncate">Rp 0</h2>
-                    </div>
-                    <i class="ph ph-wallet text-[140px] text-theme-accent opacity-5 absolute -right-6 -bottom-10 transform -rotate-12 z-0 pointer-events-none"></i>
-                </div>
                     <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden group">
                         <div class="absolute -right-4 -bottom-4 text-rose-500/10 text-7xl group-hover:scale-110 transition-transform"><i class="ph ph-trend-down"></i></div>
                         <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest relative z-10">Total Pengeluaran</p>
@@ -828,7 +769,6 @@
             </form>
         </div>
     </div>
-
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
