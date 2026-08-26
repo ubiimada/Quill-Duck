@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Quill-Duck Finance App</title>
+    <!-- Favicon Logo -->
+    <link rel="icon" type="image/jpeg" href="logo.jpg">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Phosphor Icons -->
@@ -15,14 +17,14 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         
         :root {
-            /* Tema Gelap (Dark Pawon) - Default (Sudah Direvisi Kontrasnya) */
-            --bg-color: #121212; /* Sedikit lebih terang dari hitam legam */
-            --card-color: #1e1e1e; /* Kontras lebih baik dengan bg */
-            --text-main: #ffffff; /* Putih terang untuk keterbacaan */
+            /* Tema Gelap (Dark Pawon) - Default */
+            --bg-color: #121212; 
+            --card-color: #1e1e1e; 
+            --text-main: #ffffff; 
             --text-muted: #a1a1aa;
             --accent-color: #d4af37;
             --accent-hover: #f2ca51;
-            --border-color: #3f3f46; /* Garis lebih terlihat */
+            --border-color: #3f3f46; 
         }
 
         .theme-soft {
@@ -216,23 +218,23 @@
                     <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden group">
                         <div class="absolute -right-4 -bottom-4 text-emerald-500/10 text-7xl group-hover:scale-110 transition-transform"><i class="ph ph-trend-up"></i></div>
                         <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest relative z-10">Total Pemasukan</p>
-                        <h3 id="dash-tot-in" class="text-xl sm:text-2xl font-black text-emerald-500 relative z-10 drop-shadow-sm truncate">Rp 0</h3>
+                        <h3 id="dash-tot-in" class="text-xl sm:text-2xl font-black text-emerald-500 relative z-10 drop-shadow-sm pb-1 leading-tight overflow-visible">Rp 0</h3>
                     </div>
                     <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden group">
                         <div class="absolute -right-4 -bottom-4 text-rose-500/10 text-7xl group-hover:scale-110 transition-transform"><i class="ph ph-trend-down"></i></div>
                         <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest relative z-10">Total Pengeluaran</p>
-                        <h3 id="dash-tot-out" class="text-xl sm:text-2xl font-black text-rose-500 relative z-10 drop-shadow-sm truncate">Rp 0</h3>
+                        <h3 id="dash-tot-out" class="text-xl sm:text-2xl font-black text-rose-500 relative z-10 drop-shadow-sm pb-1 leading-tight overflow-visible">Rp 0</h3>
                     </div>
                     <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden bg-theme-accent/5 border-theme-accent/30 group">
                         <div class="absolute -right-4 -bottom-4 text-theme-accent/10 text-7xl group-hover:scale-110 transition-transform"><i class="ph ph-scales"></i></div>
                         <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest relative z-10">Laba Bersih Operasional</p>
-                        <h3 id="dash-net" class="text-xl sm:text-2xl font-black text-theme-accent relative z-10 drop-shadow-sm truncate">Rp 0</h3>
+                        <h3 id="dash-net" class="text-xl sm:text-2xl font-black text-theme-accent relative z-10 drop-shadow-sm pb-1 leading-tight overflow-visible">Rp 0</h3>
                     </div>
                     <!-- Info Brankas Panel in Dashboard -->
                     <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden bg-slate-800/20 border-slate-500/30 group">
                         <div class="absolute -right-4 -bottom-4 text-slate-500/10 text-7xl group-hover:scale-110 transition-transform"><i class="ph ph-vault"></i></div>
                         <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest relative z-10">Total Saldo Brankas</p>
-                        <h3 id="dash-brankas" class="text-xl sm:text-2xl font-black text-slate-400 relative z-10 drop-shadow-sm truncate">Rp 0</h3>
+                        <h3 id="dash-brankas" class="text-xl sm:text-2xl font-black text-slate-400 relative z-10 drop-shadow-sm pb-1 leading-tight overflow-visible">Rp 0</h3>
                     </div>
                 </div>
 
@@ -278,7 +280,7 @@
                             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
                             <p class="text-[9px] font-black text-theme-muted tracking-widest uppercase">Saldo Kas Operasional (Berputar)</p>
                         </div>
-                        <h2 id="total-kas-display" class="text-3xl sm:text-4xl font-black text-theme-accent font-serif tracking-tighter drop-shadow-md truncate">Rp 0</h2>
+                        <h2 id="total-kas-display" class="text-3xl sm:text-4xl font-black text-theme-accent font-serif tracking-tighter drop-shadow-md pb-1 leading-tight overflow-visible">Rp 0</h2>
                     </div>
                     <i class="ph ph-wallet text-6xl sm:text-[80px] text-theme-accent opacity-5 absolute -right-4 -bottom-4 transform -rotate-12 z-0 pointer-events-none"></i>
                 </div>
@@ -363,7 +365,8 @@
                     <i class="ph ph-vault text-[120px] text-white opacity-5 absolute -right-4 -bottom-4 transform -rotate-6 z-0 pointer-events-none"></i>
                     <div class="relative z-10 text-center w-full">
                         <p class="text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest flex items-center justify-center truncate"><i class="ph ph-lock-key mr-2 text-lg text-slate-300"></i> Saldo Brankas (Dana Mengendap/Cadangan)</p>
-                        <h2 id="total-brankas-display" class="text-4xl sm:text-5xl lg:text-6xl font-black text-white font-serif tracking-tighter drop-shadow-md mb-6 truncate">Rp 0</h2>
+                        <!-- Perbaikan Teks Terpotong di sini -->
+                        <h2 id="total-brankas-display" class="text-4xl sm:text-5xl lg:text-6xl font-black text-white font-serif tracking-tighter drop-shadow-md mb-6 pb-2 leading-tight overflow-visible">Rp 0</h2>
                         <div class="flex flex-wrap justify-center gap-3">
                             <button onclick="window.openBrankasModal('in_from_kas')" class="px-4 py-2 bg-emerald-500 text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-md hover:bg-emerald-400 transition-colors"><i class="ph ph-download-simple mr-1"></i> Pindah Kas ke Brankas</button>
                             <button onclick="window.openBrankasModal('out_to_kas')" class="px-4 py-2 bg-blue-500 text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-md hover:bg-blue-400 transition-colors"><i class="ph ph-upload-simple mr-1"></i> Cairkan ke Kas</button>
@@ -654,17 +657,17 @@
                 <div>
                     <label class="block text-[9px] font-black text-theme-muted mb-2 uppercase tracking-widest">Pilih Warna</label>
                     <div class="flex flex-wrap gap-2" id="cat-color-picker">
-                        <!-- Pilihan warna standar Tailwind -->
-                        <div onclick="window.selectCatColor('#3b82f6')" class="w-8 h-8 rounded-full bg-blue-500 cursor-pointer ring-2 ring-transparent ring-offset-2 ring-offset-theme-card color-option" data-color="#3b82f6"></div>
-                        <div onclick="window.selectCatColor('#8b5cf6')" class="w-8 h-8 rounded-full bg-violet-500 cursor-pointer ring-2 ring-transparent ring-offset-2 ring-offset-theme-card color-option" data-color="#8b5cf6"></div>
-                        <div onclick="window.selectCatColor('#f59e0b')" class="w-8 h-8 rounded-full bg-amber-500 cursor-pointer ring-2 ring-transparent ring-offset-2 ring-offset-theme-card color-option" data-color="#f59e0b"></div>
-                        <div onclick="window.selectCatColor('#ec4899')" class="w-8 h-8 rounded-full bg-pink-500 cursor-pointer ring-2 ring-transparent ring-offset-2 ring-offset-theme-card color-option" data-color="#ec4899"></div>
-                        <div onclick="window.selectCatColor('#06b6d4')" class="w-8 h-8 rounded-full bg-cyan-500 cursor-pointer ring-2 ring-transparent ring-offset-2 ring-offset-theme-card color-option" data-color="#06b6d4"></div>
-                        <div onclick="window.selectCatColor('#10b981')" class="w-8 h-8 rounded-full bg-emerald-500 cursor-pointer ring-2 ring-transparent ring-offset-2 ring-offset-theme-card color-option" data-color="#10b981"></div>
-                        <div onclick="window.selectCatColor('#ef4444')" class="w-8 h-8 rounded-full bg-red-500 cursor-pointer ring-2 ring-transparent ring-offset-2 ring-offset-theme-card color-option" data-color="#ef4444"></div>
-                        <div onclick="window.selectCatColor('#f97316')" class="w-8 h-8 rounded-full bg-orange-500 cursor-pointer ring-2 ring-transparent ring-offset-2 ring-offset-theme-card color-option" data-color="#f97316"></div>
-                        <div onclick="window.selectCatColor('#64748b')" class="w-8 h-8 rounded-full bg-slate-500 cursor-pointer ring-2 ring-transparent ring-offset-2 ring-offset-theme-card color-option" data-color="#64748b"></div>
-                        <div onclick="window.selectCatColor('#d946ef')" class="w-8 h-8 rounded-full bg-fuchsia-500 cursor-pointer ring-2 ring-transparent ring-offset-2 ring-offset-theme-card color-option" data-color="#d946ef"></div>
+                        <!-- Pilihan warna standar Tailwind ditambahkan flex & justify center agar icon centang pas di tengah -->
+                        <div onclick="window.selectCatColor('#3b82f6')" class="w-8 h-8 rounded-full bg-blue-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#3b82f6"></div>
+                        <div onclick="window.selectCatColor('#8b5cf6')" class="w-8 h-8 rounded-full bg-violet-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#8b5cf6"></div>
+                        <div onclick="window.selectCatColor('#f59e0b')" class="w-8 h-8 rounded-full bg-amber-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#f59e0b"></div>
+                        <div onclick="window.selectCatColor('#ec4899')" class="w-8 h-8 rounded-full bg-pink-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#ec4899"></div>
+                        <div onclick="window.selectCatColor('#06b6d4')" class="w-8 h-8 rounded-full bg-cyan-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#06b6d4"></div>
+                        <div onclick="window.selectCatColor('#10b981')" class="w-8 h-8 rounded-full bg-emerald-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#10b981"></div>
+                        <div onclick="window.selectCatColor('#ef4444')" class="w-8 h-8 rounded-full bg-red-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#ef4444"></div>
+                        <div onclick="window.selectCatColor('#f97316')" class="w-8 h-8 rounded-full bg-orange-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#f97316"></div>
+                        <div onclick="window.selectCatColor('#64748b')" class="w-8 h-8 rounded-full bg-slate-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#64748b"></div>
+                        <div onclick="window.selectCatColor('#d946ef')" class="w-8 h-8 rounded-full bg-fuchsia-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#d946ef"></div>
                     </div>
                     <input type="hidden" id="cat-color" value="#3b82f6">
                 </div>
@@ -1244,7 +1247,7 @@
                         </div>
                         <div class="relative z-10">
                             <h4 class="text-xs font-bold text-theme-text">${m.description}${editLabel}</h4>
-                            <div class="mt-1 text-sm font-black ${textColorClass} tracking-tight drop-shadow-sm">${formatRp(m.amount)}</div>
+                            <div class="mt-1 text-sm font-black ${textColorClass} tracking-tight drop-shadow-sm pb-1 leading-tight overflow-visible">${formatRp(m.amount)}</div>
                         </div>
                         ${bulkHtml}
                     </div>`;
@@ -1466,13 +1469,19 @@
 
                 let editLabel = b.updatedAt ? `<br><span class="text-[8px] italic opacity-70 flex items-center mt-0.5"><i class="ph ph-pencil-simple mr-1"></i>Diedit: ${formatEditTime(b.updatedAt)}</span>` : '';
 
+                // Memasukkan tombol delete
                 tbody.innerHTML += `
                     <tr class="border-b border-theme-border hover:bg-theme-bg/80 even:bg-theme-bg/30 transition-colors">
                         <td class="p-4 font-black text-theme-text text-[10px]">${b.date ? b.date.split('-').reverse().join('/') : '-'}</td>
                         <td class="p-4"><span class="px-2 py-1 rounded-md text-[8px] font-black uppercase tracking-widest border shadow-sm ${catClass}">${name}</span></td>
                         <td class="p-4 text-xs font-bold text-theme-muted">${b.description || '-'}${editLabel}</td>
                         <td class="p-4 text-right font-black ${sign==='+'?'text-emerald-500':'text-blue-500'} tracking-tight">${sign} ${formatRp(amount)}</td>
-                        <td class="p-4 text-center"><button onclick="window.editBrankas('${b.id}')" class="w-7 h-7 bg-theme-bg border border-theme-border text-theme-muted hover:text-amber-500 hover:border-amber-500 rounded-lg flex items-center justify-center transition-colors mx-auto shadow-sm"><i class="ph ph-pencil-simple"></i></button></td>
+                        <td class="p-4">
+                            <div class="flex items-center justify-center space-x-2">
+                                <button onclick="window.editBrankas('${b.id}')" class="w-7 h-7 bg-theme-bg border border-theme-border text-theme-muted hover:text-amber-500 hover:border-amber-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"><i class="ph ph-pencil-simple"></i></button>
+                                <button onclick="window.deleteBrankas('${b.id}')" class="w-7 h-7 bg-theme-bg border border-theme-border text-theme-muted hover:text-rose-500 hover:border-rose-500 rounded-lg flex items-center justify-center transition-colors shadow-sm"><i class="ph ph-trash"></i></button>
+                            </div>
+                        </td>
                     </tr>`;
             });
             document.getElementById('total-brankas-display').innerText = formatRp(total);
@@ -1496,6 +1505,24 @@
         };
 
         window.editBrankas = (id) => { const b = brankasData.find(x => x.id === id); if(b) window.openBrankasModal(b.type || 'in_external', b); };
+
+        window.deleteBrankas = (id) => {
+            window.showConfirmModal('Hapus Riwayat Brankas', 'Yakin ingin menghapus data ini? Saldo kas akan menyesuaikan kembali jika berhubungan.', async () => {
+                try {
+                    // Cek apakah ada data di mutasi kas yang terikat dengan id brankas ini
+                    const mLink = mutations.find(m => m.sourceId === 'brankas_'+id);
+                    if(mLink) {
+                        // Soft delete mutasi yang terhubung
+                        await updateDoc(getPosDoc("finance_mutations", mLink.id), { isDeleted: true, deletedAt: new Date().toISOString() });
+                    }
+                    // Hapus data brankas permanent
+                    await deleteDoc(getPosDoc("finance_brankas", id));
+                    showToast("Transaksi brankas berhasil dihapus", "success");
+                } catch(e) {
+                    showToast(e.message, 'error');
+                }
+            });
+        };
 
         document.getElementById('brankas-form').addEventListener('submit', async (e) => {
             e.preventDefault(); if(!isAuthReady) return;
@@ -1563,7 +1590,21 @@
 
         window.selectCatColor = (color) => {
             document.getElementById('cat-color').value = color;
-            document.querySelectorAll('.color-option').forEach(el => { el.classList.remove('ring-theme-text'); if(el.dataset.color === color) el.classList.add('ring-theme-text'); });
+            document.querySelectorAll('.color-option').forEach(el => { 
+                // Reset styling
+                el.innerHTML = '';
+                el.style.boxShadow = '';
+                el.classList.remove('scale-110');
+                
+                // Tambahkan Highlight jika dipilih
+                if(el.dataset.color === color) {
+                    el.classList.add('scale-110');
+                    // Buat efek ring cincin ganda
+                    el.style.boxShadow = `0 0 0 2px var(--bg-color), 0 0 0 4px ${color}`;
+                    // Tampilkan icon centang
+                    el.innerHTML = '<i class="ph ph-check text-white font-bold drop-shadow-md"></i>';
+                }
+            });
         };
 
         document.getElementById('category-form').addEventListener('submit', async (e) => {
