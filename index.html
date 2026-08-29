@@ -336,10 +336,6 @@
                                 <button onclick="document.getElementById('filter-income-date').value=''; window.filterMutasiTables()" class="px-2 py-2 bg-theme-bg border border-theme-border rounded-lg text-theme-muted hover:text-rose-500"><i class="ph ph-x"></i></button>
                             </div>
                         </div>
-                        <!-- Info bahwa data arsip dihilangkan (Hanya Teks, bukan tombol) -->
-                        <div class="bg-theme-bg py-1.5 px-3 flex justify-center items-center shrink-0 border-b border-theme-border">
-                            <span class="text-[8px] font-bold text-theme-muted"><i class="ph ph-info mr-1"></i> Data yang sudah Tutup Buku hanya bisa dilihat di tab Library.</span>
-                        </div>
                         <div class="flex-1 overflow-y-auto no-scrollbar p-2" id="income-list"></div>
                     </div>
 
@@ -1085,6 +1081,7 @@
                     snap.forEach(d => { archivesData.push({ id: d.id, ...d.data() }); });
                     archivesData.sort((a, b) => b.timestamp - a.timestamp);
                     renderArchives();
+                    calculateTotalKas(); // Pastikan saldo juga di-update jika ada arsip baru/dihapus
                 });
 
                 // 5. Close Registers (Dari POS) -> Menjadi Menunggu Konfirmasi di Mutasi
@@ -1125,11 +1122,18 @@
 
         const calculateTotalKas = () => {
             let total = 0;
-            // Hitung hanya yang belum di arsipkan ke tutup buku
+            
+            // 1. Tambahkan saldo dari seluruh Laba Bersih Arsip (Tutup Buku)
+            archivesData.forEach(a => {
+                total += parseFloat(a.netProfit) || 0;
+            });
+
+            // 2. Tambahkan saldo dari Mutasi Kas yang belum diarsipkan
             mutations.filter(m => !m.isArchived).forEach(m => {
                 if (m.type === 'income') total += parseFloat(m.amount) || 0;
                 else if (m.type === 'expense') total -= parseFloat(m.amount) || 0;
             });
+
             document.getElementById('total-kas-display').innerText = formatRp(total);
         };
 
@@ -1542,6 +1546,7 @@
 
                 let editLabel = b.updatedAt ? `<br><span class="text-[8px] italic opacity-70 flex items-center mt-0.5"><i class="ph ph-pencil-simple mr-1"></i>Diedit: ${formatEditTime(b.updatedAt)}</span>` : '';
 
+                // Memasukkan tombol delete
                 tbody.innerHTML += `
                     <tr class="border-b border-theme-border hover:bg-theme-bg/80 even:bg-theme-bg/30 transition-colors">
                         <td class="p-4 font-black text-theme-text text-[10px]">${b.date ? b.date.split('-').reverse().join('/') : '-'}</td>
@@ -1976,3 +1981,5 @@
     </script>
 </body>
 </html>
+
+```eof
