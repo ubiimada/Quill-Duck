@@ -17,25 +17,25 @@
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
         
         :root {
-            /* Tema Gelap (Dark Pawon) - Default */
-            --bg-color: #121212; 
-            --card-color: #1e1e1e; 
-            --text-main: #ffffff; 
-            --text-muted: #a1a1aa;
+            /* Tema Gelap (Hitam & Emas) - Kontras Tinggi */
+            --bg-color: #0a0a0a; 
+            --card-color: #141414; 
+            --text-main: #f8fafc; 
+            --text-muted: #9ca3af;
             --accent-color: #d4af37;
             --accent-hover: #f2ca51;
-            --border-color: #3f3f46; 
+            --border-color: #262626; 
         }
 
         .theme-soft {
-            /* Tema Soft Pink (Elegan) */
-            --bg-color: #fdfaf6;
-            --card-color: #ffffff;
-            --text-main: #27272a;
-            --text-muted: #71717a;
-            --accent-color: #f472b6;
-            --accent-hover: #db2777;
-            --border-color: #e4e4e7;
+            /* Tema Soft (Pink Kalem) - Elegan & Kontras */
+            --bg-color: #fdf2f8; /* Latar belakang pink sangat muda */
+            --card-color: #ffffff; /* Kartu putih bersih */
+            --text-main: #1f2937; /* Teks abu gelap mendekati hitam */
+            --text-muted: #6b7280; /* Teks sekunder abu-abu */
+            --accent-color: #ec4899; /* Aksen pink kalem */
+            --accent-hover: #db2777; /* Hover pink gelap */
+            --border-color: #fbcfe8; /* Border pink tipis */
         }
 
         body { 
@@ -74,6 +74,10 @@
             -webkit-appearance: none;
             margin: 0;
         }
+
+        /* Transisi Token Library */
+        .library-token { transition: all 0.3s ease; }
+        .library-token:hover { transform: translateY(-4px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); border-color: var(--accent-color); }
     </style>
 </head>
 <body class="h-screen overflow-hidden flex flex-col md:flex-row selection:bg-theme-accent selection:text-white">
@@ -122,7 +126,10 @@
                     <i class="ph ph-vault text-xl"></i><span class="hidden lg:block text-xs font-bold uppercase tracking-wider">Brankas</span>
                 </button>
                 <button onclick="window.switchTab('arsip')" id="btn-tab-arsip" class="w-full flex items-center justify-center lg:justify-start space-x-3 px-4 py-3 rounded-xl transition-all text-theme-muted hover:bg-theme-bg/50">
-                    <i class="ph ph-files text-xl"></i><span class="hidden lg:block text-xs font-bold uppercase tracking-wider">Tutup Buku</span>
+                    <i class="ph ph-books text-xl"></i><span class="hidden lg:block text-xs font-bold uppercase tracking-wider">Tutup Buku</span>
+                </button>
+                <button onclick="window.switchTab('library')" id="btn-tab-library" class="w-full flex items-center justify-center lg:justify-start space-x-3 px-4 py-3 rounded-xl transition-all text-theme-muted hover:bg-theme-bg/50">
+                    <i class="ph ph-archive text-xl"></i><span class="hidden lg:block text-xs font-bold uppercase tracking-wider">Library</span>
                 </button>
                 
                 <!-- Pemisah -->
@@ -181,15 +188,16 @@
                 <button onclick="window.toggleMobileMenu()" class="w-10 h-10 bg-theme-card text-white rounded-full flex items-center justify-center border border-theme-border"><i class="ph ph-x text-xl"></i></button>
             </div>
             <div class="flex-1 flex flex-col items-center justify-center space-y-4 p-8 overflow-y-auto">
-                <button onclick="window.switchTab('dashboard'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-chart-pie-slice text-theme-accent"></i><span>Dashboard</span></button>
-                <button onclick="window.switchTab('mutasi'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-swap text-theme-accent"></i><span>Mutasi Kas</span></button>
-                <button onclick="window.switchTab('brankas'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-vault text-theme-accent"></i><span>Brankas</span></button>
-                <button onclick="window.switchTab('arsip'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-files text-theme-accent"></i><span>Tutup Buku</span></button>
+                <button onclick="window.switchTab('dashboard'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl border border-theme-border"><i class="ph ph-chart-pie-slice text-theme-accent"></i><span>Dashboard</span></button>
+                <button onclick="window.switchTab('mutasi'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl border border-theme-border"><i class="ph ph-swap text-theme-accent"></i><span>Mutasi Kas</span></button>
+                <button onclick="window.switchTab('brankas'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl border border-theme-border"><i class="ph ph-vault text-theme-accent"></i><span>Brankas</span></button>
+                <button onclick="window.switchTab('arsip'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl border border-theme-border"><i class="ph ph-books text-theme-accent"></i><span>Tutup Buku</span></button>
+                <button onclick="window.switchTab('library'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl border border-theme-border"><i class="ph ph-archive text-theme-accent"></i><span>Library</span></button>
                 
                 <div class="w-full max-w-xs h-px bg-white/20 my-2"></div>
                 
-                <button onclick="window.switchTab('kategori'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-gear text-theme-accent"></i><span>Pengaturan</span></button>
-                <button onclick="window.switchTab('sampah'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl"><i class="ph ph-trash text-theme-accent"></i><span>Sampah</span></button>
+                <button onclick="window.switchTab('kategori'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl border border-theme-border"><i class="ph ph-gear text-theme-accent"></i><span>Pengaturan</span></button>
+                <button onclick="window.switchTab('sampah'); window.toggleMobileMenu()" class="w-full max-w-xs text-lg font-black text-white uppercase tracking-widest flex items-center space-x-3 bg-theme-card p-3 rounded-xl border border-theme-border"><i class="ph ph-trash text-theme-accent"></i><span>Sampah</span></button>
                 
                 <button onclick="window.toggleTheme(); window.toggleMobileMenu()" id="theme-text-mobile" class="mt-8 px-6 py-3 border border-theme-accent bg-theme-accent text-slate-900 rounded-xl text-xs font-black uppercase tracking-widest shadow-md">Ubah ke Soft Mode</button>
             </div>
@@ -231,7 +239,7 @@
                         <h3 id="dash-net" class="text-xl sm:text-2xl font-black text-theme-accent relative z-10 drop-shadow-sm pb-1 leading-tight overflow-visible">Rp 0</h3>
                     </div>
                     <!-- Info Brankas Panel in Dashboard -->
-                    <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden bg-slate-800/20 border-slate-500/30 group">
+                    <div class="glass-card p-6 flex flex-col justify-center relative overflow-hidden bg-slate-800/10 border-slate-500/30 group">
                         <div class="absolute -right-4 -bottom-4 text-slate-500/10 text-7xl group-hover:scale-110 transition-transform"><i class="ph ph-vault"></i></div>
                         <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest relative z-10">Total Saldo Brankas</p>
                         <h3 id="dash-brankas" class="text-xl sm:text-2xl font-black text-slate-400 relative z-10 drop-shadow-sm pb-1 leading-tight overflow-visible">Rp 0</h3>
@@ -260,7 +268,7 @@
                     </div>
                 </div>
 
-                <!-- New Feature: Kotak Rincian Kategori Pengeluaran -->
+                <!-- Rincian Kategori Pengeluaran -->
                 <div class="glass-card p-4 sm:p-6 mt-4 sm:mt-6">
                     <h3 class="text-xs font-black text-theme-text mb-4 uppercase tracking-widest border-b border-theme-border pb-3 flex items-center shrink-0">
                         <i class="ph ph-list-numbers text-rose-500 mr-2 text-lg"></i> Rincian Pengeluaran per Kategori
@@ -328,6 +336,10 @@
                                 <button onclick="document.getElementById('filter-income-date').value=''; window.filterMutasiTables()" class="px-2 py-2 bg-theme-bg border border-theme-border rounded-lg text-theme-muted hover:text-rose-500"><i class="ph ph-x"></i></button>
                             </div>
                         </div>
+                        <!-- Info bahwa data arsip dihilangkan (Hanya Teks, bukan tombol) -->
+                        <div class="bg-theme-bg py-1.5 px-3 flex justify-center items-center shrink-0 border-b border-theme-border">
+                            <span class="text-[8px] font-bold text-theme-muted"><i class="ph ph-info mr-1"></i> Data yang sudah Tutup Buku hanya bisa dilihat di tab Library.</span>
+                        </div>
                         <div class="flex-1 overflow-y-auto no-scrollbar p-2" id="income-list"></div>
                     </div>
 
@@ -349,10 +361,9 @@
                                 <button onclick="document.getElementById('filter-expense-date').value=''; window.filterMutasiTables()" class="px-2 py-2 bg-theme-bg border border-theme-border rounded-lg text-theme-muted hover:text-rose-500"><i class="ph ph-x"></i></button>
                             </div>
                         </div>
-                        <!-- Toggle Tampilkan Data Arsip -->
-                        <div class="bg-theme-bg py-1.5 px-3 flex justify-between items-center shrink-0 border-b border-theme-border">
-                            <span class="text-[9px] font-bold text-theme-muted">Data Arsip Laporan Disembunyikan</span>
-                            <button onclick="window.toggleShowArchived()" id="btn-toggle-archived" class="text-theme-muted hover:text-theme-text text-[10px] flex items-center transition-colors"><i class="ph ph-eye-slash mr-1 text-sm"></i> Tampilkan</button>
+                        <!-- Info bahwa data arsip dihilangkan -->
+                        <div class="bg-theme-bg py-1.5 px-3 flex justify-center items-center shrink-0 border-b border-theme-border">
+                            <span class="text-[8px] font-bold text-theme-muted"><i class="ph ph-info mr-1"></i> Data yang sudah Tutup Buku hanya bisa dilihat di tab Library.</span>
                         </div>
                         <div class="flex-1 overflow-y-auto no-scrollbar p-2" id="expense-list"></div>
                     </div>
@@ -365,7 +376,7 @@
                     <i class="ph ph-vault text-[120px] text-white opacity-5 absolute -right-4 -bottom-4 transform -rotate-6 z-0 pointer-events-none"></i>
                     <div class="relative z-10 text-center w-full">
                         <p class="text-[10px] font-black text-slate-400 mb-2 uppercase tracking-widest flex items-center justify-center truncate"><i class="ph ph-lock-key mr-2 text-lg text-slate-300"></i> Saldo Brankas (Dana Mengendap/Cadangan)</p>
-                        <!-- Perbaikan Teks Terpotong di sini -->
+                        <!-- Perbaikan Teks Terpotong -->
                         <h2 id="total-brankas-display" class="text-4xl sm:text-5xl lg:text-6xl font-black text-white font-serif tracking-tighter drop-shadow-md mb-6 pb-2 leading-tight overflow-visible">Rp 0</h2>
                         <div class="flex flex-wrap justify-center gap-3">
                             <button onclick="window.openBrankasModal('in_from_kas')" class="px-4 py-2 bg-emerald-500 text-slate-900 rounded-xl text-[10px] font-black uppercase tracking-widest shadow-md hover:bg-emerald-400 transition-colors"><i class="ph ph-download-simple mr-1"></i> Pindah Kas ke Brankas</button>
@@ -391,12 +402,11 @@
                 </div>
             </div>
 
-            <!-- TAB: ARSIP / TUTUP BUKU -->
+            <!-- TAB: TUTUP BUKU -->
             <div id="tab-arsip" class="tab-content max-w-5xl mx-auto space-y-6 hidden">
-                <!-- Info Section -->
                 <div class="glass-card p-5 border-l-4 border-l-theme-accent">
-                    <h2 class="text-sm font-black text-theme-text uppercase tracking-widest mb-1 flex items-center"><i class="ph ph-books text-theme-accent mr-2 text-xl"></i> Laporan Bulanan / Tutup Buku</h2>
-                    <p class="text-[10px] font-bold text-theme-muted uppercase tracking-widest leading-relaxed">Pilih rentang tanggal untuk menganalisa laba/rugi dan simpan sebagai Arsip Laporan permanen. Data yang diarsipkan akan disembunyikan dari tabel Mutasi Kas.</p>
+                    <h2 class="text-sm font-black text-theme-text uppercase tracking-widest mb-1 flex items-center"><i class="ph ph-books text-theme-accent mr-2 text-xl"></i> Buat Laporan Tutup Buku</h2>
+                    <p class="text-[10px] font-bold text-theme-muted uppercase tracking-widest leading-relaxed">Analisa transaksi Mutasi Kas dan simpan sebagai Arsip. Data yang diarsipkan tidak akan bisa dimasukkan ke tutup buku lain dan akan dihilangkan dari tampilan Mutasi Kas.</p>
                 </div>
 
                 <div class="glass-card p-5 sm:p-6 shadow-sm">
@@ -458,18 +468,21 @@
                         </div>
 
                         <div class="pt-6 border-t border-theme-border text-center">
-                            <button onclick="window.openArsipModal()" class="px-8 py-4 bg-theme-card text-theme-accent border border-theme-accent rounded-xl text-xs font-black uppercase tracking-widest shadow-xl hover:bg-theme-accent hover:text-slate-900 transition-all flex items-center justify-center mx-auto space-x-2"><i class="ph ph-archive-box text-lg"></i><span>Simpan Arsip Laporan Ini</span></button>
+                            <button onclick="window.openArsipModal()" class="px-8 py-4 bg-theme-card text-theme-accent border border-theme-accent rounded-xl text-xs font-black uppercase tracking-widest shadow-xl hover:bg-theme-accent hover:text-slate-900 transition-all flex items-center justify-center mx-auto space-x-2"><i class="ph ph-archive-box text-lg"></i><span>Simpan Laporan Ke Library</span></button>
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Laporan Tersimpan Grid -->
-                <div class="glass-card overflow-hidden shadow-sm">
-                    <div class="p-4 border-b border-theme-border bg-theme-bg/80 flex items-center space-x-2">
-                        <i class="ph ph-archive text-theme-muted"></i>
-                        <h3 class="text-xs font-black text-theme-text uppercase tracking-widest">Buku Laporan Tersimpan</h3>
-                    </div>
-                    <div class="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4" id="arsip-list-container"></div>
+            <!-- TAB: LIBRARY (BARU) -->
+            <div id="tab-library" class="tab-content max-w-7xl mx-auto space-y-6 hidden">
+                <div class="glass-card p-5 border-l-4 border-l-theme-accent mb-4">
+                    <h2 class="text-sm font-black text-theme-text uppercase tracking-widest mb-1 flex items-center"><i class="ph ph-archive text-theme-accent mr-2 text-xl"></i> Library Tutup Buku</h2>
+                    <p class="text-[10px] font-bold text-theme-muted uppercase tracking-widest leading-relaxed">Kumpulan arsip laporan yang sudah disimpan. Klik pada salah satu laporan untuk melihat analisis lengkapnya.</p>
+                </div>
+                
+                <div id="library-list-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                    <!-- Cards dari javascript masuk kesini -->
                 </div>
             </div>
 
@@ -521,6 +534,87 @@
 
         </main>
     </div>
+
+    <!-- Modal Detail Laporan Library -->
+    <div id="library-detail-modal" class="hidden fixed inset-0 bg-slate-900/95 backdrop-blur-sm z-[60] flex-col overflow-y-auto">
+        <div class="w-full max-w-6xl mx-auto p-4 sm:p-6 min-h-screen flex flex-col relative">
+            <div class="flex justify-between items-center bg-theme-card border border-theme-border p-4 rounded-3xl shadow-xl sticky top-4 z-10 shrink-0">
+                <div class="flex items-center space-x-4">
+                    <div class="w-12 h-12 bg-theme-bg rounded-full flex items-center justify-center border border-theme-accent"><i class="ph ph-books text-2xl text-theme-accent"></i></div>
+                    <div>
+                        <h2 id="lib-title" class="text-sm sm:text-lg font-black text-theme-text uppercase tracking-widest leading-none">Judul Laporan</h2>
+                        <p id="lib-date" class="text-[10px] font-bold text-theme-muted mt-1 uppercase tracking-widest">Tanggal Laporan</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <!-- Tombol Hapus Arsip (Kembalikan Data) -->
+                    <button onclick="window.confirmDeleteArchive()" class="px-4 py-2 bg-rose-500/10 text-rose-500 border border-rose-500/30 rounded-xl text-[9px] sm:text-[10px] font-black uppercase tracking-widest hover:bg-rose-500 hover:text-white transition-colors flex items-center"><i class="ph ph-arrow-u-up-left mr-1 sm:mr-2 text-sm"></i><span class="hidden sm:inline">Hapus & Kembalikan Data</span></button>
+                    <!-- Tombol Close -->
+                    <button onclick="window.closeModal('library-detail-modal')" class="w-10 h-10 bg-theme-bg text-theme-text rounded-full flex items-center justify-center border border-theme-border hover:bg-theme-accent hover:text-slate-900 transition-colors"><i class="ph ph-x text-xl"></i></button>
+                </div>
+            </div>
+
+            <!-- Konten Analisis Laporan -->
+            <div class="mt-6 flex-1 space-y-6">
+                <!-- KPI -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div class="glass-card p-5 text-center">
+                        <p class="text-[10px] font-black text-emerald-500 mb-1 uppercase tracking-widest">Pemasukan Laporan</p>
+                        <h3 id="lib-res-in" class="text-2xl sm:text-3xl font-black text-theme-text truncate drop-shadow-sm pb-1 leading-tight overflow-visible">Rp 0</h3>
+                    </div>
+                    <div class="glass-card p-5 text-center">
+                        <p class="text-[10px] font-black text-rose-500 mb-1 uppercase tracking-widest">Pengeluaran Laporan</p>
+                        <h3 id="lib-res-out" class="text-2xl sm:text-3xl font-black text-theme-text truncate drop-shadow-sm pb-1 leading-tight overflow-visible">Rp 0</h3>
+                    </div>
+                    <div class="glass-card p-5 text-center border-theme-accent/50 bg-theme-accent/5 relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 text-theme-accent/10 text-7xl"><i class="ph ph-scales"></i></div>
+                        <p class="text-[10px] font-black text-theme-accent mb-1 uppercase tracking-widest relative z-10">Laba Bersih Laporan</p>
+                        <h3 id="lib-res-net" class="text-2xl sm:text-3xl font-black text-theme-accent relative z-10 truncate drop-shadow-sm pb-1 leading-tight overflow-visible">Rp 0</h3>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+                    <!-- Charts -->
+                    <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+                        <div class="glass-card p-5 flex flex-col h-[350px]">
+                            <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest text-center border-b border-theme-border pb-2 shrink-0">Komposisi Pemasukan</p>
+                            <div class="flex-1 w-full relative min-h-0 pt-2"><canvas id="lib-chart-in"></canvas></div>
+                        </div>
+                        <div class="glass-card p-5 flex flex-col h-[350px]">
+                            <p class="text-[10px] font-black text-theme-muted mb-2 uppercase tracking-widest text-center border-b border-theme-border pb-2 shrink-0">Komposisi Pengeluaran</p>
+                            <div class="flex-1 w-full relative min-h-0 pt-2"><canvas id="lib-chart-out"></canvas></div>
+                        </div>
+                    </div>
+                    <!-- Catatan Laporan -->
+                    <div class="glass-card p-5 flex flex-col max-h-[350px]">
+                        <h3 class="text-[10px] font-black text-theme-muted mb-3 uppercase tracking-widest flex items-center border-b border-theme-border pb-2 shrink-0"><i class="ph ph-notepad mr-2 text-theme-accent"></i> Catatan Laporan</h3>
+                        <div class="flex-1 overflow-y-auto no-scrollbar bg-theme-bg p-3 rounded-xl border border-theme-border shadow-inner">
+                            <ul id="lib-notes-list" class="space-y-3 text-[10px] text-theme-text font-bold leading-relaxed tracking-wide"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabel Transaksi dalam Arsip ini -->
+                <div class="glass-card overflow-hidden">
+                    <div class="p-4 border-b border-theme-border bg-theme-bg/80 flex items-center space-x-2">
+                        <i class="ph ph-list-dashes text-theme-muted text-lg"></i>
+                        <h3 class="text-xs font-black text-theme-text uppercase tracking-widest">Rincian Transaksi Yang Terkunci</h3>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs whitespace-nowrap">
+                            <thead class="bg-theme-bg text-theme-muted text-[9px] uppercase tracking-widest font-black border-b border-theme-border">
+                                <tr><th class="p-4">Tgl</th><th class="p-4">Jenis</th><th class="p-4">Kategori & Keterangan</th><th class="p-4 text-right">Nominal</th></tr>
+                            </thead>
+                            <tbody id="lib-table-body" class="divide-y divide-theme-border/30 bg-theme-card"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- Hidden input for holding current archive id -->
+            <input type="hidden" id="current-library-id" value="">
+        </div>
+    </div>
+
 
     <!-- Modal Input/Edit Pengeluaran -->
     <div id="expense-modal" class="hidden fixed inset-0 bg-slate-900/90 backdrop-blur-sm flex justify-center items-center p-4 z-50 overflow-y-auto">
@@ -657,7 +751,7 @@
                 <div>
                     <label class="block text-[9px] font-black text-theme-muted mb-2 uppercase tracking-widest">Pilih Warna</label>
                     <div class="flex flex-wrap gap-2" id="cat-color-picker">
-                        <!-- Pilihan warna standar Tailwind ditambahkan flex & justify center agar icon centang pas di tengah -->
+                        <!-- Pilihan warna -->
                         <div onclick="window.selectCatColor('#3b82f6')" class="w-8 h-8 rounded-full bg-blue-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#3b82f6"></div>
                         <div onclick="window.selectCatColor('#8b5cf6')" class="w-8 h-8 rounded-full bg-violet-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#8b5cf6"></div>
                         <div onclick="window.selectCatColor('#f59e0b')" class="w-8 h-8 rounded-full bg-amber-500 cursor-pointer flex items-center justify-center transition-all color-option" data-color="#f59e0b"></div>
@@ -679,7 +773,7 @@
     </div>
 
     <!-- Modal Konfirmasi Hapus -->
-    <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-900/90 backdrop-blur-sm flex justify-center items-center p-4 z-50">
+    <div id="confirm-modal" class="hidden fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-[70] flex justify-center items-center p-4">
         <div class="bg-theme-card rounded-3xl w-full max-w-xs border border-rose-500/30 shadow-2xl overflow-hidden text-center p-6">
             <div class="w-16 h-16 rounded-full bg-rose-500/10 text-rose-500 flex items-center justify-center text-3xl mx-auto mb-4 border border-rose-500/20"><i class="ph ph-warning-circle"></i></div>
             <h3 class="text-sm font-black text-theme-text uppercase tracking-widest mb-2" id="confirm-title">Konfirmasi</h3>
@@ -733,7 +827,7 @@
     <div id="arsip-modal" class="hidden fixed inset-0 bg-slate-900/90 backdrop-blur-sm flex justify-center items-center p-4 z-50">
         <div class="bg-theme-card rounded-3xl w-full max-w-sm border border-theme-accent/30 shadow-2xl overflow-hidden">
             <div class="p-5 border-b border-theme-border bg-theme-bg flex justify-between items-center">
-                <h3 class="text-xs font-black text-theme-accent uppercase tracking-widest flex items-center"><i class="ph ph-archive-box mr-2 text-lg"></i> Simpan Laporan</h3>
+                <h3 class="text-xs font-black text-theme-accent uppercase tracking-widest flex items-center"><i class="ph ph-archive-box mr-2 text-lg"></i> Simpan Laporan Ke Library</h3>
                 <button onclick="window.closeModal('arsip-modal')" class="text-theme-muted hover:text-theme-text bg-theme-card w-8 h-8 rounded-full flex items-center justify-center border border-theme-border transition-colors"><i class="ph ph-x"></i></button>
             </div>
             <form id="arsip-form" class="p-6 space-y-4">
@@ -752,11 +846,11 @@
                     </div>
                 </div>
                 <!-- Warning Text -->
-                <p class="text-[8px] font-bold text-rose-500 uppercase tracking-widest text-center mt-2"><i class="ph ph-warning mr-1"></i>Data Mutasi pada periode ini akan disembunyikan otomatis.</p>
+                <p class="text-[8px] font-bold text-rose-500 uppercase tracking-widest text-center mt-2"><i class="ph ph-warning mr-1"></i>Data Mutasi pada periode ini akan TERKUNCI dan disembunyikan otomatis dari tabel utama.</p>
                 
                 <div class="flex space-x-3 pt-4 border-t border-theme-border">
                     <button type="button" onclick="window.closeModal('arsip-modal')" class="flex-1 px-4 py-4 bg-theme-bg border border-theme-border text-theme-text rounded-xl hover:bg-theme-card transition-all text-[10px] font-black uppercase tracking-widest shadow-sm">Batal</button>
-                    <button type="submit" id="btn-submit-arsip" class="flex-1 px-4 py-4 bg-theme-accent text-slate-900 text-[10px] font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all shadow-md">Arsipkan</button>
+                    <button type="submit" id="btn-submit-arsip" class="flex-1 px-4 py-4 bg-theme-accent text-slate-900 text-[10px] font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all shadow-md">Kunci & Simpan</button>
                 </div>
             </form>
         </div>
@@ -825,6 +919,7 @@
 
         let tbChartInc = null, tbChartExp = null;
         let dashChartInc = null, dashChartExp = null;
+        let libChartInc = null, libChartExp = null; // Charts for library detail
         
         let categories = [], mutations = [], trashMutations = [];
         let pendingDeposits = [], rawTransactions = [];
@@ -834,7 +929,6 @@
         let expenseMode = 'single'; 
         let bulkItems = [{ name: '', price: '' }];
         let currentTheme = 'dark';
-        let showArchivedInMutasi = false;
         
         window.tempTbNotes = []; // Menyimpan list catatan saat membuat laporan tutup buku
 
@@ -908,22 +1002,14 @@
             }
 
             if(tabName === 'dashboard') applyDashboardFilter();
+            if(tabName === 'library') renderArchives();
         };
 
         window.setupAutoFormatListeners = () => {
             const incAmount = document.getElementById('inc-amount');
-            if (incAmount) {
-                incAmount.addEventListener('input', function() {
-                    window.formatCurrencyInput(this);
-                });
-            }
-            
+            if (incAmount) { incAmount.addEventListener('input', function() { window.formatCurrencyInput(this); }); }
             const expAmount = document.getElementById('exp-amount');
-            if (expAmount) {
-                expAmount.addEventListener('input', function() {
-                    window.formatCurrencyInput(this);
-                });
-            }
+            if (expAmount) { expAmount.addEventListener('input', function() { window.formatCurrencyInput(this); }); }
         };
 
         window.toggleBulkAccordion = (id) => {
@@ -980,6 +1066,7 @@
                     trashMutations.sort((a, b) => new Date(b.deletedAt) - new Date(a.deletedAt));
                     
                     calculateTotalKas(); window.applyDashboardFilter(); window.filterMutasiTables(); renderTrashTable();
+                    if(!document.getElementById('tab-library').classList.contains('hidden')) renderArchives();
                     if(typeof window.checkPosRevisions === 'function') window.checkPosRevisions();
                     if(document.getElementById('loading-screen')) document.getElementById('loading-screen').classList.add('opacity-0', 'pointer-events-none');
                 });
@@ -1038,7 +1125,8 @@
 
         const calculateTotalKas = () => {
             let total = 0;
-            mutations.forEach(m => {
+            // Hitung hanya yang belum di arsipkan ke tutup buku
+            mutations.filter(m => !m.isArchived).forEach(m => {
                 if (m.type === 'income') total += parseFloat(m.amount) || 0;
                 else if (m.type === 'expense') total -= parseFloat(m.amount) || 0;
             });
@@ -1101,7 +1189,7 @@
                 await addDoc(getPosCol("finance_mutations"), { 
                     type: 'income', date: date, category: 'Setoran', 
                     amount: actualAmount, posNominal: posAmount, sourceId: depId, 
-                    description: finalDesc, createdAt: new Date().toISOString(), isDeleted: false 
+                    description: finalDesc, createdAt: new Date().toISOString(), isDeleted: false, isArchived: false
                 });
                 
                 showToast("Setoran Diterima & Disimpan!", "success");
@@ -1118,8 +1206,8 @@
             let revHtml = '';
             windowAllCloseRegisters.forEach(cr => {
                 if(cr.finance_status === 'confirmed') {
-                    const linkedMut = mutations.find(m => m.sourceId === cr.id && !m.isDeleted);
-                    // Compare POS nominal at the time of finance confirmation vs current POS nominal
+                    // Check non-deleted AND non-archived to easily fix it if it's still in mutasi kas.
+                    const linkedMut = mutations.find(m => m.sourceId === cr.id && !m.isDeleted && !m.isArchived);
                     if(linkedMut && linkedMut.posNominal !== undefined && linkedMut.posNominal !== cr.setoranCashReal) {
                         revHtml += `<div class="bg-rose-500/10 border border-rose-500/30 p-4 rounded-2xl flex flex-col md:flex-row justify-between items-start md:items-center gap-3 shadow-sm relative overflow-hidden group">
                             <div class="absolute -right-4 -top-4 text-rose-500/10 text-6xl transform group-hover:scale-110 transition-transform"><i class="ph ph-warning"></i></div>
@@ -1171,29 +1259,20 @@
             else { showToast("Tidak ada data raw baru yg bisa ditarik."); }
         };
 
-        window.toggleShowArchived = () => {
-            showArchivedInMutasi = !showArchivedInMutasi;
-            const btn = document.getElementById('btn-toggle-archived');
-            if(showArchivedInMutasi) { btn.innerHTML = `<i class="ph ph-eye mr-1 text-sm"></i> Sembunyikan`; btn.classList.add('text-theme-accent'); btn.classList.remove('text-theme-muted'); }
-            else { btn.innerHTML = `<i class="ph ph-eye-slash mr-1 text-sm"></i> Tampilkan`; btn.classList.add('text-theme-muted'); btn.classList.remove('text-theme-accent'); }
-            window.filterMutasiTables();
-        };
-
+        // Filter selalu menyembunyikan data yang diarsip (isArchived === true)
         window.filterMutasiTables = () => {
             const incCat = document.getElementById('filter-income-cat').value;
             const incDate = document.getElementById('filter-income-date').value;
             const expCat = document.getElementById('filter-expense-cat').value;
             const expDate = document.getElementById('filter-expense-date').value;
 
-            let filteredInc = mutations.filter(m => m.type === 'income');
+            let filteredInc = mutations.filter(m => m.type === 'income' && !m.isArchived);
             if(incCat !== 'ALL') filteredInc = filteredInc.filter(m => m.category === incCat);
             if(incDate) filteredInc = filteredInc.filter(m => m.date === incDate);
-            if(!showArchivedInMutasi) filteredInc = filteredInc.filter(m => !m.isArchived);
 
-            let filteredExp = mutations.filter(m => m.type === 'expense');
+            let filteredExp = mutations.filter(m => m.type === 'expense' && !m.isArchived);
             if(expCat !== 'ALL') filteredExp = filteredExp.filter(m => m.category === expCat);
             if(expDate) filteredExp = filteredExp.filter(m => m.date === expDate);
-            if(!showArchivedInMutasi) filteredExp = filteredExp.filter(m => !m.isArchived);
 
             renderMutasiTable('income-list', filteredInc, 'income');
             renderMutasiTable('expense-list', filteredExp, 'expense');
@@ -1231,7 +1310,6 @@
                 }
 
                 let archiveTag = m.isArchived ? `<span class="px-1.5 py-0.5 bg-theme-accent/20 text-theme-accent text-[8px] rounded uppercase font-black ml-2">Arsip</span>` : '';
-                
                 let editLabel = m.updatedAt ? `<br><span class="text-[8px] italic opacity-70 flex items-center mt-0.5"><i class="ph ph-pencil-simple mr-1"></i>Diedit: ${formatEditTime(m.updatedAt)}</span>` : '';
 
                 container.innerHTML += `
@@ -1329,9 +1407,7 @@
                 
                 // Add event listeners locally to the specific inputs to update state and total immediately
                 const nameInput = tr.querySelector('.bulk-name-input');
-                nameInput.addEventListener('input', (e) => {
-                    bulkItems[idx].name = e.target.value;
-                });
+                nameInput.addEventListener('input', (e) => { bulkItems[idx].name = e.target.value; });
 
                 const priceInput = tr.querySelector('.bulk-price-input');
                 priceInput.addEventListener('input', (e) => {
@@ -1363,21 +1439,18 @@
                 const payload = {
                     type: 'expense', date: document.getElementById('exp-date').value,
                     category: document.getElementById('exp-category').value,
-                    isDeleted: false
+                    isDeleted: false,
+                    isArchived: false
                 };
                 if(expenseMode === 'single') {
                     payload.amount = parseCurrencyStr(document.getElementById('exp-amount').value);
                     payload.description = document.getElementById('exp-desc').value;
                     payload.bulkData = [];
                 } else {
-                    // Ensure we capture the absolute latest inputs before saving
                     saveBulkInputValues();
-                    
                     payload.amount = calculateBulkTotal();
                     payload.bulkData = bulkItems.filter(b => b.name.trim() !== '' && (parseFloat(b.price)>0));
-                    
                     payload.description = document.getElementById('exp-bulk-title').value || "Nota Bulk";
-
                     if(payload.bulkData.length === 0) throw new Error("Isi minimal 1 rincian nota yang valid!");
                 }
                 
@@ -1408,7 +1481,8 @@
                     category: document.getElementById('inc-category').value,
                     amount: parseCurrencyStr(document.getElementById('inc-amount').value),
                     description: document.getElementById('inc-desc').value,
-                    isDeleted: false
+                    isDeleted: false,
+                    isArchived: false
                 };
                 if(id) {
                     payload.updatedAt = new Date().toISOString();
@@ -1442,7 +1516,6 @@
                 document.getElementById('inc-id').value = m.id; document.getElementById('income-modal-title').innerHTML = '<i class="ph ph-pencil-simple mr-2 text-lg"></i> Edit Pemasukan';
                 document.getElementById('inc-date').value = m.date; 
                 
-                // Jika setoran, paksa kategori dan nonaktifkan select
                 if(isSetoran) {
                     const sel = document.getElementById('inc-category');
                     if(![...sel.options].some(o=>o.value==='Setoran')) sel.innerHTML += `<option value="Setoran">Setoran</option>`;
@@ -1469,7 +1542,6 @@
 
                 let editLabel = b.updatedAt ? `<br><span class="text-[8px] italic opacity-70 flex items-center mt-0.5"><i class="ph ph-pencil-simple mr-1"></i>Diedit: ${formatEditTime(b.updatedAt)}</span>` : '';
 
-                // Memasukkan tombol delete
                 tbody.innerHTML += `
                     <tr class="border-b border-theme-border hover:bg-theme-bg/80 even:bg-theme-bg/30 transition-colors">
                         <td class="p-4 font-black text-theme-text text-[10px]">${b.date ? b.date.split('-').reverse().join('/') : '-'}</td>
@@ -1500,7 +1572,7 @@
             let prefix = editData ? "[EDIT] " : "";
             if(type === 'in_from_kas') { t.innerHTML = `<i class="ph ph-download-simple mr-2 text-lg text-emerald-500"></i> ${prefix}Pindah Kas ke Brankas`; info.innerText = "Uang Kas Usaha akan BERKURANG, saldo Brankas akan BERTAMBAH."; }
             else if(type === 'out_to_kas') { t.innerHTML = `<i class="ph ph-upload-simple mr-2 text-lg text-blue-500"></i> ${prefix}Cairkan ke Kas`; info.innerText = "Saldo Brankas akan BERKURANG, uang Kas Usaha akan BERTAMBAH."; }
-            else { t.innerHTML = `<i class="ph ph-plus-circle mr-2 text-lg text-slate-500"></i> ${prefix}Suntikan Dana Luar`; info.innerText = "Hanya saldo Brankas yang BERTAMBAH. Tidak mempengaruhi Kas Usaha."; document.getElementById('brankas-type').value = 'in_external';} // Pastikan type valid
+            else { t.innerHTML = `<i class="ph ph-plus-circle mr-2 text-lg text-slate-500"></i> ${prefix}Suntikan Dana Luar`; info.innerText = "Hanya saldo Brankas yang BERTAMBAH. Tidak mempengaruhi Kas Usaha."; document.getElementById('brankas-type').value = 'in_external';} 
             document.getElementById('brankas-modal').classList.remove('hidden');
         };
 
@@ -1509,18 +1581,11 @@
         window.deleteBrankas = (id) => {
             window.showConfirmModal('Hapus Riwayat Brankas', 'Yakin ingin menghapus data ini? Saldo kas akan menyesuaikan kembali jika berhubungan.', async () => {
                 try {
-                    // Cek apakah ada data di mutasi kas yang terikat dengan id brankas ini
                     const mLink = mutations.find(m => m.sourceId === 'brankas_'+id);
-                    if(mLink) {
-                        // Soft delete mutasi yang terhubung
-                        await updateDoc(getPosDoc("finance_mutations", mLink.id), { isDeleted: true, deletedAt: new Date().toISOString() });
-                    }
-                    // Hapus data brankas permanent
+                    if(mLink) { await updateDoc(getPosDoc("finance_mutations", mLink.id), { isDeleted: true, deletedAt: new Date().toISOString() }); }
                     await deleteDoc(getPosDoc("finance_brankas", id));
                     showToast("Transaksi brankas berhasil dihapus", "success");
-                } catch(e) {
-                    showToast(e.message, 'error');
-                }
+                } catch(e) { showToast(e.message, 'error'); }
             });
         };
 
@@ -1541,19 +1606,15 @@
                 if (id) {
                     bPayload.updatedAt = dtNow;
                     await updateDoc(getPosDoc("finance_brankas", id), bPayload);
-                    // Update linked mutasi (jika ada)
                     const mLink = mutations.find(m => m.sourceId === 'brankas_'+id);
-                    if(mLink) {
-                        await updateDoc(getPosDoc("finance_mutations", mLink.id), { date: date, amount: amount, description: title + (desc ? ' - ' + desc : ''), updatedAt: dtNow });
-                    }
+                    if(mLink) { await updateDoc(getPosDoc("finance_mutations", mLink.id), { date: date, amount: amount, description: title + (desc ? ' - ' + desc : ''), updatedAt: dtNow }); }
                 } else {
                     bPayload.createdAt = dtNow;
                     const docRef = await addDoc(getPosCol("finance_brankas"), bPayload);
-                    // Insert to mutasi kas if affecting kas
                     if (type === 'in_from_kas') {
-                        await addDoc(getPosCol("finance_mutations"), { type: 'expense', date: date, category: 'Pindah ke Brankas', amount: amount, description: title + (desc ? ' - ' + desc : ''), sourceId: 'brankas_'+docRef.id, isDeleted: false, createdAt: dtNow });
+                        await addDoc(getPosCol("finance_mutations"), { type: 'expense', date: date, category: 'Pindah ke Brankas', amount: amount, description: title + (desc ? ' - ' + desc : ''), sourceId: 'brankas_'+docRef.id, isDeleted: false, isArchived: false, createdAt: dtNow });
                     } else if (type === 'out_to_kas') {
-                        await addDoc(getPosCol("finance_mutations"), { type: 'income', date: date, category: 'Cairkan dari Brankas', amount: amount, description: title + (desc ? ' - ' + desc : ''), sourceId: 'brankas_'+docRef.id, isDeleted: false, createdAt: dtNow });
+                        await addDoc(getPosCol("finance_mutations"), { type: 'income', date: date, category: 'Cairkan dari Brankas', amount: amount, description: title + (desc ? ' - ' + desc : ''), sourceId: 'brankas_'+docRef.id, isDeleted: false, isArchived: false, createdAt: dtNow });
                     }
                 }
                 showToast("Transaksi Brankas Berhasil", "success"); window.closeModal('brankas-modal');
@@ -1591,17 +1652,10 @@
         window.selectCatColor = (color) => {
             document.getElementById('cat-color').value = color;
             document.querySelectorAll('.color-option').forEach(el => { 
-                // Reset styling
-                el.innerHTML = '';
-                el.style.boxShadow = '';
-                el.classList.remove('scale-110');
-                
-                // Tambahkan Highlight jika dipilih
+                el.innerHTML = ''; el.style.boxShadow = ''; el.classList.remove('scale-110');
                 if(el.dataset.color === color) {
                     el.classList.add('scale-110');
-                    // Buat efek ring cincin ganda
                     el.style.boxShadow = `0 0 0 2px var(--bg-color), 0 0 0 4px ${color}`;
-                    // Tampilkan icon centang
                     el.innerHTML = '<i class="ph ph-check text-white font-bold drop-shadow-md"></i>';
                 }
             });
@@ -1671,7 +1725,8 @@
             const start = new Date(sd).getTime(); const end = new Date(ed).getTime() + 86400000;
             let totIn = 0, totOut = 0; let catIn = {}, catOut = {};
 
-            mutations.filter(m => !m.isDeleted).forEach(m => {
+            // Analisa hanya data yang BELUM DI ARSIP
+            mutations.filter(m => !m.isDeleted && !m.isArchived).forEach(m => {
                 const tTime = new Date(m.date).getTime();
                 if(tTime >= start && tTime < end) {
                     const amount = parseFloat(m.amount) || 0;
@@ -1685,31 +1740,33 @@
             document.getElementById('tb-res-net').innerText = formatRp(totIn - totOut);
             document.getElementById('tb-result-container').classList.remove('hidden');
 
-            renderTbCharts(catIn, catOut);
+            renderTbCharts(catIn, catOut, 'tb-chart-in', 'tb-chart-out');
             
             // Simpan state untuk proses arsip
             window.tempArsipData = { startDate: sd, endDate: ed, totalIncome: totIn, totalExpense: totOut, netProfit: (totIn - totOut), notes: window.tempTbNotes };
             window.renderTbNotes();
         };
 
-        const renderTbCharts = (catIn, catOut) => {
+        const renderTbCharts = (catIn, catOut, incCanvasId, expCanvasId, isLib = false) => {
             const getCatColor = (name) => { const c = categories.find(x => x.name === name); return c ? c.color : '#64748b'; };
             
-            if(tbChartInc) tbChartInc.destroy(); if(tbChartExp) tbChartExp.destroy();
+            if(!isLib) { if(tbChartInc) tbChartInc.destroy(); if(tbChartExp) tbChartExp.destroy(); }
+            else { if(libChartInc) libChartInc.destroy(); if(libChartExp) libChartExp.destroy(); }
+
             const inLabels = Object.keys(catIn); const inData = Object.values(catIn); const inColors = inLabels.map(l => getCatColor(l));
             const outLabels = Object.keys(catOut); const outData = Object.values(catOut); const outColors = outLabels.map(l => getCatColor(l));
             
-            const textColor = currentTheme === 'soft' ? '#374151' : '#fdf6e3';
-
+            const textColor = currentTheme === 'soft' ? '#1f2937' : '#f8fafc';
             const opts = { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right', labels: { color: textColor, font: { size: 9, family: 'Inter', weight: 'bold' } } } } };
 
-            tbChartInc = new Chart(document.getElementById('tb-chart-in').getContext('2d'), { type: 'doughnut', data: { labels: inLabels, datasets: [{ data: inData, backgroundColor: inColors, borderWidth: 0 }] }, options: opts });
-            tbChartExp = new Chart(document.getElementById('tb-chart-out').getContext('2d'), { type: 'doughnut', data: { labels: outLabels, datasets: [{ data: outData, backgroundColor: outColors, borderWidth: 0 }] }, options: opts });
+            const chInc = new Chart(document.getElementById(incCanvasId).getContext('2d'), { type: 'doughnut', data: { labels: inLabels, datasets: [{ data: inData, backgroundColor: inColors, borderWidth: 0 }] }, options: opts });
+            const chExp = new Chart(document.getElementById(expCanvasId).getContext('2d'), { type: 'doughnut', data: { labels: outLabels, datasets: [{ data: outData, backgroundColor: outColors, borderWidth: 0 }] }, options: opts });
+
+            if(!isLib) { tbChartInc = chInc; tbChartExp = chExp; } else { libChartInc = chInc; libChartExp = chExp; }
         };
 
         window.openArsipModal = () => {
             if(!window.tempArsipData) return;
-            // Update notes object before opening modal
             window.tempArsipData.notes = window.tempTbNotes;
             
             const startStr = window.tempArsipData.startDate.split('-').reverse().join('/'); const endStr = window.tempArsipData.endDate.split('-').reverse().join('/');
@@ -1721,46 +1778,117 @@
 
         document.getElementById('arsip-form').addEventListener('submit', async (e) => {
             e.preventDefault(); if(!isAuthReady) return;
-            const btn = document.getElementById('btn-submit-arsip'); const origText = btn.innerHTML; btn.innerText = "Mengarsipkan..."; btn.disabled = true;
+            const btn = document.getElementById('btn-submit-arsip'); const origText = btn.innerHTML; btn.innerText = "Mengunci..."; btn.disabled = true;
             try {
                 const name = document.getElementById('arsip-name').value;
-                await addDoc(getPosCol("finance_archives"), { name: name, timestamp: Date.now(), ...window.tempArsipData });
-                
-                // Tandai mutasi sebagai isArchived agar hilang dari tabel utama
+                const archiveRef = await addDoc(getPosCol("finance_archives"), { name: name, timestamp: Date.now(), ...window.tempArsipData });
+                const archiveId = archiveRef.id;
+
+                // Tandai mutasi sebagai isArchived = true & simpan id nya (hanya yang belum diarsip)
                 const start = new Date(window.tempArsipData.startDate).getTime(); const end = new Date(window.tempArsipData.endDate).getTime() + 86400000;
                 let mutToArchive = mutations.filter(m => { const t = new Date(m.date).getTime(); return t >= start && t < end && !m.isDeleted && !m.isArchived; });
                 
-                showLoading("Menyembunyikan Data Lama...");
-                for(let m of mutToArchive) { await updateDoc(getPosDoc("finance_mutations", m.id), { isArchived: true }); }
+                showLoading("Menyembunyikan & Mengunci Data...");
+                for(let m of mutToArchive) { await updateDoc(getPosDoc("finance_mutations", m.id), { isArchived: true, archiveId: archiveId }); }
                 hideLoading();
 
-                showToast("Laporan Berhasil Diarsipkan!", "success"); window.closeModal('arsip-modal');
+                showToast("Laporan Tersimpan & Terkunci!", "success"); window.closeModal('arsip-modal');
                 document.getElementById('tb-result-container').classList.add('hidden');
                 document.getElementById('tb-start').value = ''; document.getElementById('tb-end').value = '';
-                window.tempTbNotes = []; // Clear notes
+                window.tempTbNotes = [];
             } catch(e) { showToast(e.message, 'error'); hideLoading(); } finally { btn.innerHTML = origText; btn.disabled = false; }
         });
 
+        // Tampilan Kartu Library Baru
         const renderArchives = () => {
-            const container = document.getElementById('arsip-list-container'); container.innerHTML = '';
+            const container = document.getElementById('library-list-container'); container.innerHTML = '';
+            if(archivesData.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-10 text-theme-muted font-bold text-xs uppercase tracking-widest"><i class="ph ph-archive block text-3xl mb-2 opacity-50"></i>Belum ada laporan yang diarsipkan.</div>`;
+                return;
+            }
             archivesData.forEach(a => {
-                let notesHtml = '';
-                if(a.notes && a.notes.length > 0) {
-                    notesHtml = `<div class="mt-3 pt-3 border-t border-theme-border/50"><p class="text-[8px] font-black text-theme-muted uppercase tracking-widest mb-1">Catatan Manager:</p><ul class="text-[9px] text-theme-text space-y-0.5">` + a.notes.map(n => `<li>- ${n}</li>`).join('') + `</ul></div>`;
-                }
+                let noteSnippet = a.notes && a.notes.length > 0 ? a.notes[0] : 'Tidak ada catatan...';
+                
                 container.innerHTML += `
-                    <div class="bg-theme-bg p-4 rounded-2xl border border-theme-border shadow-sm flex flex-col justify-between group hover:border-theme-accent transition-colors">
+                    <div onclick="window.openArchiveDetail('${a.id}')" class="library-token bg-theme-bg p-5 rounded-2xl border border-theme-border shadow-sm flex flex-col justify-between cursor-pointer group">
                         <div class="mb-4">
-                            <span class="px-2.5 py-1 bg-theme-accent/20 text-theme-accent text-[8px] font-black uppercase tracking-widest rounded-lg mb-2 inline-block shadow-sm">Arsip Laporan</span>
-                            <h4 class="text-xs font-black text-theme-text uppercase tracking-widest leading-tight">${a.name}</h4>
-                            <p class="text-[9px] font-bold text-theme-muted mt-1">${a.startDate.split('-').reverse().join('/')} - ${a.endDate.split('-').reverse().join('/')}</p>
+                            <span class="px-2.5 py-1 bg-theme-accent/20 text-theme-accent text-[8px] font-black uppercase tracking-widest rounded-lg mb-3 inline-block shadow-sm">Token Arsip</span>
+                            <h4 class="text-xs font-black text-theme-text uppercase tracking-widest leading-tight group-hover:text-theme-accent transition-colors">${a.name}</h4>
+                            <p class="text-[9px] font-bold text-theme-muted mt-1.5 flex items-center"><i class="ph ph-calendar-blank mr-1"></i>${a.startDate.split('-').reverse().join('/')} - ${a.endDate.split('-').reverse().join('/')}</p>
                         </div>
-                        <div class="pt-3 border-t border-theme-border/50">
-                            <p class="text-[9px] text-theme-muted font-bold uppercase tracking-widest">Laba Bersih</p>
-                            <h5 class="text-sm font-black text-theme-accent">${formatRp(a.netProfit)}</h5>
+                        <div class="pt-3 border-t border-theme-border/50 flex justify-between items-end">
+                            <div>
+                                <p class="text-[8px] text-theme-muted font-bold uppercase tracking-widest mb-0.5">Laba / Rugi</p>
+                                <h5 class="text-sm font-black text-theme-accent">${formatRp(a.netProfit)}</h5>
+                            </div>
+                            <div class="text-[10px] text-theme-muted italic truncate w-1/2 text-right">"${noteSnippet}"</div>
                         </div>
-                        ${notesHtml}
                     </div>`;
+            });
+        };
+
+        // Buka Detail Library Layar Penuh
+        window.openArchiveDetail = (archiveId) => {
+            const a = archivesData.find(x => x.id === archiveId); if(!a) return;
+            document.getElementById('current-library-id').value = a.id;
+            document.getElementById('lib-title').innerText = a.name;
+            document.getElementById('lib-date').innerText = `Periode: ${a.startDate.split('-').reverse().join('/')} - ${a.endDate.split('-').reverse().join('/')}`;
+            
+            document.getElementById('lib-res-in').innerText = formatRp(a.totalIncome);
+            document.getElementById('lib-res-out').innerText = formatRp(a.totalExpense);
+            document.getElementById('lib-res-net').innerText = formatRp(a.netProfit);
+
+            const notesContainer = document.getElementById('lib-notes-list'); notesContainer.innerHTML = '';
+            if(a.notes && a.notes.length > 0) {
+                a.notes.forEach(n => { notesContainer.innerHTML += `<li class="flex items-start"><i class="ph ph-caret-right text-theme-accent mr-2 mt-0.5"></i> ${n}</li>`; });
+            } else { notesContainer.innerHTML = `<li class="text-theme-muted italic">Tidak ada catatan untuk periode ini.</li>`; }
+
+            // Ambil transaksi yang terkait dengan arsip ini untuk grafik dan tabel
+            const linkedMuts = mutations.filter(m => m.archiveId === a.id);
+            let catIn = {}, catOut = {};
+            const tbody = document.getElementById('lib-table-body'); tbody.innerHTML = '';
+            
+            linkedMuts.forEach(m => {
+                const amount = parseFloat(m.amount) || 0;
+                if(m.type === 'income') { catIn[m.category] = (catIn[m.category] || 0) + amount; }
+                else { catOut[m.category] = (catOut[m.category] || 0) + amount; }
+
+                const typeClass = m.type === 'income' ? 'text-emerald-500' : 'text-rose-500';
+                const typeSign = m.type === 'income' ? '+' : '-';
+                const catObj = categories.find(c => c.name === m.category); 
+                const color = catObj ? catObj.color : '#64748b';
+
+                tbody.innerHTML += `
+                    <tr class="border-b border-theme-border/50 hover:bg-theme-bg/50">
+                        <td class="p-4 font-black text-theme-muted text-[10px]">${m.date.split('-').reverse().join('/')}</td>
+                        <td class="p-4"><span class="px-2 py-0.5 text-[8px] font-black uppercase tracking-widest text-white rounded shadow-sm" style="background-color:${color}">${m.category}</span></td>
+                        <td class="p-4 text-[10px] font-bold text-theme-text">${m.description || '-'}</td>
+                        <td class="p-4 text-right font-black ${typeClass} tracking-tight">${typeSign} ${formatRp(m.amount)}</td>
+                    </tr>`;
+            });
+            if(linkedMuts.length === 0) tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-[10px] text-theme-muted font-bold uppercase">Data transaksi kosong/hilang</td></tr>`;
+
+            renderTbCharts(catIn, catOut, 'lib-chart-in', 'lib-chart-out', true);
+            document.getElementById('library-detail-modal').classList.remove('hidden');
+            document.getElementById('library-detail-modal').classList.add('flex');
+        };
+
+        window.confirmDeleteArchive = () => {
+            window.showConfirmModal('Hapus & Kembalikan Data', 'Hapus arsip ini? Semua data transaksi di dalamnya akan dikeluarkan dan KEMBALI ke Mutasi Kas.', async () => {
+                const archiveId = document.getElementById('current-library-id').value;
+                if(!archiveId) return;
+                
+                showLoading("Mengembalikan data mutasi...");
+                try {
+                    const linkedMuts = mutations.filter(m => m.archiveId === archiveId);
+                    for(let m of linkedMuts) {
+                        await updateDoc(getPosDoc("finance_mutations", m.id), { isArchived: false, archiveId: null });
+                    }
+                    await deleteDoc(getPosDoc("finance_archives", archiveId));
+                    hideLoading();
+                    showToast("Laporan dihapus, data dikembalikan ke Mutasi Kas.", "success");
+                    window.closeModal('library-detail-modal');
+                } catch(e) { hideLoading(); showToast(e.message, 'error'); }
             });
         };
 
@@ -1793,14 +1921,12 @@
             document.getElementById('dash-net').innerText = formatRp(totIn - totOut);
 
             const getCatColor = (name) => { const c = categories.find(x => x.name === name); return c ? c.color : '#64748b'; };
-            const textColor = currentTheme === 'soft' ? '#374151' : '#9ca3af';
+            const textColor = currentTheme === 'soft' ? '#1f2937' : '#9ca3af';
             const gridColor = currentTheme === 'soft' ? '#e5e7eb' : '#333333';
 
-            // Generate Kotak Rincian Kategori Pengeluaran
             const catDetails = document.getElementById('dash-category-details');
             catDetails.innerHTML = '';
             if(Object.keys(catOut).length > 0) {
-                // Sort by highest amount
                 const sortedCats = Object.keys(catOut).sort((a,b) => catOut[b] - catOut[a]);
                 sortedCats.forEach(cat => {
                     catDetails.innerHTML += `
